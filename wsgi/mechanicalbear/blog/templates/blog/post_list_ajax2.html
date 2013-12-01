@@ -1,0 +1,120 @@
+<style>
+body {
+    font-family: Verdana, Arial, sans-serif;
+    font-size: 0.8em;
+}
+
+h1 {
+    text-align: center;
+    font-size: 2em;
+}
+
+h2 {
+    text-align: center;
+    font-size: 1.2em;
+}
+
+#posts {
+    width: 600px;
+    height: 300px;
+    overflow: auto;
+    position: relative;
+    border: solid 1px #999;
+    margin: 3em auto 0 auto;
+}
+
+.post {
+    margin: 5px 5px 5px 5px;
+    padding: 10px;
+    border: solid 1px #777;
+    border-radius: 3px;
+    -moz-border-radius: 3px;
+    -webkit-border-radius: 3px;
+    background-color: #fafafa;
+}
+
+.loader {
+    background-image: url('/static/ajax-loader.gif');
+    width: 400px;
+    height: 300px;
+    background-repeat: no-repeat;
+    background-position: center center;
+    position: fixed;
+}
+
+.hidden {
+    display: none;
+}
+</style>
+<div id="posts">
+    <div class="loader hidden"></div>
+</div>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.5.2/jquery.min.js"></script>
+<script src="/static/jsrender.js"></script>
+<script id="post_template" type="text/x-jquery-tmpl">
+    <div class="post">
+        <div class="post_content" onClick="javascript: location.href='{{ post.get_absolute_url }}';">
+            {% templatetag openvariable %}>fields.content{% templatetag closevariable %}
+            <div class="images">
+                {% for image in post.images.all %}
+                    {{ image.get_html|safe }}
+                {% empty %}
+                    <!-- Нет изображений -->
+                {% endfor %}
+            </div>
+        </div>
+        <div class="videos">
+            {% for video in post.videos.all %}
+                {{ video.get_html|safe }}
+            {% empty %}
+                <!-- Нет видеозаписей -->
+            {% endfor %}
+        </div>
+        <div class="audios">
+            {% for audio in post.audios.all %}
+                {{ audio.get_html|safe }}
+            {% empty %}
+                <!-- Нет аудиозаписей -->
+            {% endfor %}
+        </div>
+        <div class=datepub><a href="{{ post.get_absolute_url }}">{{ post.datetime }}</a></div>
+    </div>
+</script>
+
+<script>
+$(function() {
+    page = 0
+
+    var container = $('#posts');
+    var loader = $('.loader');
+    
+    get_posts(page);
+    
+    container.scroll(function() {
+        if  (container[0].scrollTop == container[0].scrollHeight - container[0].clientHeight){
+            loader.removeClass('hidden');
+            page = page + 1;
+            get_posts(page);
+        }
+    });
+    
+    function get_posts(page) {
+        $.getJSON(
+            '/api/get_posts/' + page,
+            function(data) {
+                $(data).each(function(i, post) {
+                    //p = $.map(post, function(value, key) {return {value: value, key: key}});
+                    //$('#post_template').tmpl({post: post}).appendTo('#posts');
+                    //console.debug($('#post_template').render(post));
+                    //container.html($("#post_template").render(post));
+                    //console.debug(post);
+                    container.append($('#post_template').render(post));
+                    /*
+                    */
+                });
+                loader.addClass('hidden');
+            }
+        );
+    }
+});
+</script>

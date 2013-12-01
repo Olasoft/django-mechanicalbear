@@ -1,0 +1,30 @@
+<div class="post">
+    <h2>{{post.title}}</h2>
+
+    <div class="post_content">
+        <p>{{ post.content }}</p>
+        <div class="images">
+            {% for image in post.images.all %}
+                {{ image.get_html|safe }}
+            {% empty %}
+                <!-- Нет изображений -->
+            {% endfor %}
+        </div>
+    </div>
+    <div class="videos">
+        {% for video in post.videos.all %}
+            {{ video.get_html|safe }}
+        {% empty %}
+            <!-- Нет видеозаписей -->
+        {% endfor %}
+    </div>
+    <div class="audios">
+        {% for audio in post.audios.all %}
+            {{ audio.get_html|safe }}
+        {% empty %}
+            <!-- Нет аудиозаписей -->
+        {% endfor %}
+    </div>
+
+    <p class=datepub>{{ post.datetime }}</p>
+</div>

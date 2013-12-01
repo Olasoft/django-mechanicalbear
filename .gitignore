@@ -1,0 +1,11 @@
+*.py[co]
+*.sw[po]
+*.bak
+*.orig
+*~
+*_password.py
+
+.project
+.pydevproject
+
+wsgi/mechanicalbear/db.sqlite3

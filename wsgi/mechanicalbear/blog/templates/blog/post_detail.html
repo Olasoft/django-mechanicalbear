@@ -1,0 +1,22 @@
+{% extends 'blog/base.html' %}
+
+{% load comments %}
+
+{% block title %}
+    {% if post.title %}
+        {{ post.title }} - {{ block.super }}
+    {% else %}
+        {{ block.super }}
+    {% endif %}
+{% endblock %}
+
+{% block content %}
+    {% include 'blog/post_form.html' %}
+
+    <div class='comments'>
+        {% render_comment_list for post %}
+    </div>
+    <div class='comment_form'>
+        {% render_comment_form for post %}
+    </div>
+{% endblock %}

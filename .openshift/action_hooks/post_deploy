@@ -1,0 +1,8 @@
+#!/bin/bash
+# This is a simple post deploy hook executed after your application 
+# is deployed and started.  This script gets executed directly, so 
+# it could be python, php, ruby, etc.
+
+ln -s $OPENSHIFT_DATA_DIR/images $OPENSHIFT_REPO_DIR/wsgi/static/
+ln -s $OPENSHIFT_DATA_DIR/music $OPENSHIFT_REPO_DIR/wsgi/static/
+cp $OPENSHIFT_DATA_DIR/db.sqlite3 $OPENSHIFT_REPO_DIR/wsgi/mechanicalbear/

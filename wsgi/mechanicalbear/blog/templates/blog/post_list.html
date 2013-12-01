@@ -1,0 +1,100 @@
+{% extends 'blog/base.html' %}
+{% block content %}
+    <div id="posts">
+        {% for post in object_list %}
+            {% include 'blog/post_form.html' %}
+        {% empty %}
+        <p>Нет постов</p>
+        {% endfor %}
+        <div class="loader hidden"></div>
+        <div id="tmp_data"></div>
+    </div>
+
+<!-- Template content -->
+<textarea id="template" style="display:none">
+    {#foreach $T as post}
+    <div class="post">
+        <div class="post_content" onClick="javascript: location.href='/{ $T.post.pk }';">
+            {$T.post.fields.content}
+            {#if $T.post.fields.images != ''}
+                <div class="images">
+                {#foreach $T.post.fields.images as image}
+                    <div class=image>
+                        <img src=/images/{$T.image.pk}.jpg alt="{$T.image.fields.text}"/>
+                    </div>
+                {#/for}
+                </div>
+            {#/if}
+        </div>
+        {#if $T.post.fields.videos != ''}
+            <div class="videos">
+            {#foreach $T.post.fields.videos as video}
+                <div class=video>
+                    <noindex>
+                        <iframe src="{$T.video.fields.player}" width="640" height="480" frameborder="0" allowfullscreen></iframe>
+                    </noindex>
+                    <div class=video_title>{$T.video.fields.title}</div>
+                    <div class=video_descr>{$T.video.fields.descr}</div>
+                </div>
+            {#/for}
+            </div>
+        {#/if}
+        {#if $T.post.fields.audios != ''}
+            <div class="audios">
+            {#foreach $T.post.fields.audios as audio}
+                <div class=audio>
+                    <div class=audio_info>{$T.audio.fields.artist} - {$T.audio.fields.title}</div>
+                </div>
+            {#/for}
+            </div>
+        {#/if}
+        <div class=datepub><a href="/{$T.post.pk}">{ $T.post.fields.datetime }</a></div>
+    </div>
+    {#/for}
+</textarea>
+
+<script>
+$(function() {
+    page = 1
+
+    var container = $('#posts');
+    var loader = $('.loader');
+    var tmp = $('#tmp_data');
+    window.isLoading = false;
+    
+    //get_posts(page);
+    
+    $(window).scroll(function(){
+        if ($(window).scrollTop() + $(window).height() >= $(document).height() - 777) {
+            //console.debug(window.isLoading);
+            if (window.isLoading == false) {
+                //console.debug("loading...")
+                loader.removeClass('hidden');
+                get_posts(page);
+            }
+        }
+    })
+
+    function get_posts(page) {
+        if (window.isLoading == true) return;
+        window.isLoading = true;
+
+        $.getJSON(
+            '/api/get_posts/' + page,
+            function(data) {
+
+                tmp.setTemplateElement("template");
+                tmp.processTemplate(data);
+                container.append(tmp.html());
+                tmp.empty();
+                loader.addClass('hidden');
+
+                window.page = page + 1;
+
+                window.isLoading = false;
+            }
+        );
+    }
+});
+</script>
+{% endblock %}
