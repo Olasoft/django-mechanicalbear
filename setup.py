@@ -9,5 +9,5 @@ setup(
     author='MechanicalBear',
     author_email='devel@mechanicalbear.ru',
     url='http://mechanicalbear.ru/',
-    install_requires=['Django<=1.4'],
+#    install_requires=['Django<=1.4'],
 )
