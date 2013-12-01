@@ -2,7 +2,7 @@ from secrets.twitter import oauth_token, oauth_secret, consumer_key, consumer_se
 import twitter
 
 
-auth = twitter.OAuth(token, token_secret, consumer_key, consumer_secret)
+auth = twitter.OAuth(oauth_token, oauth_secret, consumer_key, consumer_secret)
 t = twitter.Twitter(auth=auth)
 t.account.verify_credentials()
 

@@ -75,6 +75,26 @@ class Video(models.Model):
 </div>' % (self.player, self.title, self.descr)
     #<iframe src="http://vk.com/video_ext.php?oid='+self.oid+'&id='+self.id+'&hash='+self.aid+'&hd=1" width="607" height="360" frameborder="0"></iframe>\n\
 
+class Tag(models.Model):
+    class Meta:
+        verbose_name = 'ярлык'
+        verbose_name_plural = 'Ярлыки'
+
+    #id    = models.BigIntegerField(u'ID', primary_key=True)
+#    id    = models.CharField(u'Имя', max_length = 100, primary_key = True)
+    name  = models.CharField(u'Имя', max_length = 100)
+    slug  = models.CharField(u'SLUG', max_length = 100, null = True, unique = True)
+    public= models.BooleanField(u'Публичный', default = True)
+
+    def __unicode__(self):
+        return self.name
+
+    def get_url(self):
+        if self.slug is None:
+            return str(self.id)
+        return self.slug
+
+
 class Post(models.Model):
     class Meta:
         verbose_name = 'публикация'
@@ -89,6 +109,8 @@ class Post(models.Model):
     images = models.ManyToManyField(Image, blank = True)
     audios = models.ManyToManyField(Audio, blank = True)
     videos = models.ManyToManyField(Video, blank = True)
+
+    tags   = models.ManyToManyField(Tag, blank = True)
 
     def __unicode__(self):
         return str(self.id) + ' ' + self.content[:100]

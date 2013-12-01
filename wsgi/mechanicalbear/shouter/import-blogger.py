@@ -1,8 +1,12 @@
-from secrets.blogger import username, password
+#!/bin/env python
+# coding: utf-8
+from secrets.blogger import username, password, blognumb
 import gdata
 import pprint
-import sql, twit
+import sql
 import atom
+from sys import exit
+from transliterate.utils import translit
 
 pp = pprint.PrettyPrinter(indent=4)
 atom.MEMBER_STRING_ENCODING = unicode
@@ -37,6 +41,7 @@ def getid(date):
 def listposts(service, blogid):
     feed = service.Get('/feeds/' + blogid + '/posts/default?max-results=400')
     k = 0
+    all_tags = {}
     for post in feed.entry:
         #print post.GetEditLink().href.split('/')[-1], post.title.text, "[DRAFT]" if is_draft(post) else ""
         #print "###############\n\n##################"
@@ -46,17 +51,39 @@ def listposts(service, blogid):
             'title':        post.title.text,
             'content':      post.content.text,
             'deleted':      is_draft(post),
-            #'tags':         [],
         }
-        #for tag in post.category:
-        #    p['tags'].append(tag.term)
+        tags = []
+        for tag in post.category:
+            if not tag.term in all_tags:
+                slug = translit(tag.term, "ru", reversed=True)
+                slug = slug.replace(' ', '_')
+                slug = slug.replace('-', '_')
+                slug = slug.replace('.', '')
+                slug = slug.replace(',', '')
+                slug = slug.replace('\'', '')
+                slug = slug.replace('\"', '')
+                new_tag = {
+                    'slug': slug,
+                    'name': tag.term,
+                }
+                act, tid = sql.upsert('blog_tag', {'slug': slug}, {'name': tag.term, })
+                new_tag['id'] = tid
+
+                all_tags[tag.term] = new_tag
+
+            tags.append(all_tags[tag.term]['id'])
+
         for link in post.link:
             if link.rel == "alternate":
                 values['slug'] = link.href[39:-5]
                 break
 
-        #pp.pprint (values)
-        sql.upsert('blog_post', {'id': id}, values)
+        #pp.pprint (all_tags)
+        #pp.pprint (tags)
+        for tid in tags:
+            sql.upsert('blog_post_tags', {'post_id': id, 'tag_id': tid})
+
+        #sql.upsert('blog_post', {'id': id}, values)
         #if 'insert' == sql.upsert('blog_post', {'id': id}, values):
         #    try:
         #        twit.send(post.title.text, "", "http://mechanicalbear.ru/" + str(id))

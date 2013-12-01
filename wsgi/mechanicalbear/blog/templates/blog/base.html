@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 {% load staticfiles %}
+{% load post_tags %}
 <html lang="ru">
     <head>
         <meta charset="utf-8" />
@@ -53,7 +54,8 @@
 <div class="share42init" data-top2="150"></div>
 <noindex>
 <div id=menu>
-    <a href=/random>рандом</a>
+    <a href=/random>рандом</a><br />
+    {% tag_menu %}
 </div>
 </noindex>
 {%comment%}

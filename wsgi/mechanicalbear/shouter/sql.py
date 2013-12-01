@@ -1,3 +1,4 @@
+# coding: utf-8
 import sqlite3
 import datetime
 
@@ -41,6 +42,8 @@ def upsert(table, id, values = {}):
         query = query.replace('{1}', _k[2:])
         query = query.replace('{2}', _v[2:].decode("utf8"))
         act = 'insert'
+        cur.execute(query)
+        id = cur.lastrowid
     else:
         query = u'UPDATE `%s` SET {1} WHERE %s' % (table, w)
         _v = ''
@@ -51,11 +54,12 @@ def upsert(table, id, values = {}):
                 continue
             _v += ', `%s` =\'%s\'' % (k, v2q(v))
         query = query.replace('{1}', _v[2:].decode("utf8"))
+        id = data[0]
+        cur.execute(query)
 
     #print(query)
 
-    cur.execute(query)
-    return act
+    return act, id
 
 def commit():
     con.commit()

@@ -1,5 +1,4 @@
 # coding: utf-8
-# Create your views here.
 from blog.models import Post
 from django.shortcuts import redirect, render_to_response
 from django.views.generic import ListView, DetailView
@@ -14,8 +13,21 @@ class PostListView(ListView):
     model = Post
 
     def get_queryset(self):
-        post_list = Post.objects.exclude(deleted = True).order_by('-datetime')[:10]
-        return post_list
+        post_list = Post.objects.exclude(deleted = True)
+
+        if 'tag' in self.kwargs:
+            tag = self.kwargs['tag']
+            post_list = post_list.filter(tags__slug=tag)
+
+        return post_list.order_by('-datetime')[:10]
+
+    def get_context_data(self, *args, **kwargs):
+        context = super(PostListView, self).get_context_data(**kwargs)
+
+        if 'tag' in self.kwargs:
+            context['tag'] = self.kwargs['tag']
+
+        return context
 
 class PostDetailView(DetailView):
     model = Post
@@ -33,12 +45,9 @@ def monthly(request, year, month):
     return random(request)
 
 def doublerouble(request, year, month, slug):
-    #id = year + month
     year = int(year)
     month = int(month)
 
-    #print year
-    #print month
     fr = date(year, month, 1)
 
     if month == 12:
@@ -48,17 +57,8 @@ def doublerouble(request, year, month, slug):
         month += 1
 
     to = date(year, month, 1)
-    #print fr
-    #print to
-    #print slug
-#    if slug == 'blog-post':
-#        print str(fr) + " " + str(to) + " " + str(id)
-#        blog_post = Post.objects.exclude(deleted = True).filter(datetime__range = (fr, to), id__contains = id, slug = slug).order_by('datetime')
-#    else:
     print str(fr) + " " + str(to) + " " + slug
     blog_post = Post.objects.exclude(deleted = True).filter(datetime__range = (fr, to), slug = slug)
-
-    #print blog_post
 
     if blog_post.count() == 0:
         print blog_post.count()
@@ -66,14 +66,15 @@ def doublerouble(request, year, month, slug):
 
     return redirect('post', blog_post[0].id)
 
-def ajax(request):
-    return render_to_response('blog/post_list_ajax.html', {})
-
-def get_posts(request, page):
+def get_posts(request, page, tag = None):
     count = 10
     fr = int(page) * count
     to = fr + count
-    post_list = Post.objects.exclude(deleted = True).order_by('-datetime')[fr:to]
+    post_list = Post.objects.exclude(deleted = True)
+    if not tag is None:
+        post_list = post_list.filter(tags__slug = tag)
+    post_list = post_list.order_by('-datetime')[fr:to]
+
     jdata = serializers.serialize('json', post_list, indent=4, 
         relations = ('images', 'videos', 'audios', ))
     #print jdata

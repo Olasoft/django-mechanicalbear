@@ -48,6 +48,15 @@
             {#/for}
             </div>
         {#/if}
+        {#if $T.post.fields.tags != ''}
+            <div class="tags">
+            {#foreach $T.post.fields.tags as tag}
+                <div class=tag>
+                    {$T.tag.fields.name}
+                </div>
+            {#/for}
+            </div>
+        {#/if}
         <div class=datepub><a href="/{$T.post.pk}">{ $T.post.fields.datetime }</a></div>
     </div>
     {#/for}
@@ -61,11 +70,14 @@ $(function() {
     var loader = $('.loader');
     var tmp = $('#tmp_data');
     window.isLoading = false;
+    window.isEmpty = false;
     
     //get_posts(page);
     
     $(window).scroll(function(){
-        if ($(window).scrollTop() + $(window).height() >= $(document).height() - 777) {
+        if (window.isEmpty == true) return;
+
+        if ($(window).scrollTop() + $(window).height() >= $(document).height() - 1000) {
             //console.debug(window.isLoading);
             if (window.isLoading == false) {
                 //console.debug("loading...")
@@ -80,7 +92,7 @@ $(function() {
         window.isLoading = true;
 
         $.getJSON(
-            '/api/get_posts/' + page,
+            '/api/get_posts/' + page + '/{{ tag }}',
             function(data) {
 
                 tmp.setTemplateElement("template");
@@ -89,7 +101,12 @@ $(function() {
                 tmp.empty();
                 loader.addClass('hidden');
 
-                window.page = page + 1;
+                //console.debug(data.length);
+                if (data.length != 0) {
+                    window.page = page + 1;
+                } else {
+                    window.isEmpty = true;
+                }
 
                 window.isLoading = false;
             }

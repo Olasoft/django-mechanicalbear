@@ -1,0 +1,6 @@
+README
+setup.py
+MechanicalBear.egg-info/PKG-INFO
+MechanicalBear.egg-info/SOURCES.txt
+MechanicalBear.egg-info/dependency_links.txt
+MechanicalBear.egg-info/top_level.txt

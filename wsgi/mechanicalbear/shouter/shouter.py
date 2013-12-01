@@ -1,4 +1,5 @@
 #!/bin/env python
+# coding: utf-8
 import urllib
 import json
 import cgi
@@ -10,23 +11,31 @@ import re
 
 import sql, post_twitter, post_tumblr, post_flickr, post_facebook
 from BeautifulSoup import BeautifulSoup
+from secrets.vk import token
 
-dryRun = False
+ON_OPENSHIFT = False
+if os.environ.has_key('OPENSHIFT_REPO_DIR'):
+    ON_OPENSHIFT = True
+
+if ON_OPENSHIFT:
+    dryRun = False
+else:
+    dryRun = True
 
 _VK_API_URL = "https://api.vk.com/method/"
-token = "c1877813710be46ebfa8c095d68637c1e79be4bf624ec3afbfd67fa5defe98cf1e39368f8e1f69db9de96"
 wurl = _VK_API_URL + "wall.get?access_token=" + token
 vurl = _VK_API_URL + "video.get?videos=%d_%d&access_token=" + token
 
 response = urllib.urlopen(wurl)
 data = response.read()
-#content_type = response.getheader("content-type")
-#content_type, content_type_opts = cgi.parse_header(content_type)
 data = json.loads(data.decode("utf8")) #content_type_opts.get("charset", "utf-8")))
-#data = json.loads(data.decode(content_type_opts.get("charset", "utf-8")))
-#print (data)
 
 #print (json.dumps(data, sort_keys=True, indent=2))
+act, tag_pid = sql.upsert('blog_tag', {'slug': 'pictures'}, {'name': u'картинки', })
+act, tag_aid = sql.upsert('blog_tag', {'slug': 'music'},    {'name': u'саунд', })
+act, tag_vid = sql.upsert('blog_tag', {'slug': 'video'},    {'name': u'видео', })
+act, tag_kid = sql.upsert('blog_tag', {'slug': 'vk'},       {'name': u'вкашка', })
+
 for entry in data['response']:
     if isinstance(entry, (int, float, complex)):
         continue
@@ -65,6 +74,7 @@ for entry in data['response']:
 
                 sql.upsert('blog_image', {'id': pid}, {'text': text, 'width': width, 'height': height})
                 sql.upsert('blog_post_images', {'post_id': id, 'image_id': pid})
+                sql.upsert('blog_post_tags', {'post_id': id, 'tag_id': tag_pid})
                 #text += '\n<div class=image><img src=' + src + ' /></div>'
                 if image == 0:
                     image = pid
@@ -91,6 +101,7 @@ for entry in data['response']:
                     player = d['response'][1]['player']
                     sql.upsert('blog_video', {'id': vid}, {'oid': oid, 'player': player, 'title': title, 'descr': descr})
                     sql.upsert('blog_post_videos', {'post_id': id, 'video_id': vid})
+                    sql.upsert('blog_post_tags', {'post_id': id, 'tag_id': tag_vid})
                 attach_text = attach_text + " " + title
                 if video == 0:
                     video = vid
@@ -121,6 +132,7 @@ for entry in data['response']:
                     os.symlink('../' + str(aid) + '.mp3', L)
                 sql.upsert('blog_audio', {'id': aid}, {'artist': artist, 'title': title, 'duration': duration})
                 sql.upsert('blog_post_audios', {'post_id': id, 'audio_id': aid})
+                sql.upsert('blog_post_tags', {'post_id': id, 'tag_id': tag_aid})
                 #sys.exit()
                 attach_text = attach_text + " " + artist + " - " + title + "<br />"
                     
@@ -136,6 +148,7 @@ for entry in data['response']:
     text = p.sub('', text)
     attach_text = p.sub('', attach_text)
 
+    sql.upsert('blog_post_tags', {'post_id': id, 'tag_id': tag_kid})
     if  'insert' == sql.upsert('blog_post', {'id': id}, {'datetime': date, 'content': text, 'deleted': False}) and not dryRun:
 
         post_twitter.send(text, attach_text, "http://mechanicalbear.ru/" + str(id))
