@@ -17,7 +17,7 @@ class Image(models.Model):
     def get_html(self):
         return '\n\
 <div class=image>\
-    <img src=/images/' + str(self.id) + '.jpg alt="' + self.text + '"/>\
+    <img src=/static/images/' + str(self.id) + '.jpg alt="' + self.text + '"/>\
 </div>'
     #<div class=image_text>' + self.text + '</div>\
 
@@ -42,11 +42,11 @@ class Audio(models.Model):
 '''
 </div>' % (self.artist, self.title, self.id)
     <audio preload="none">\n\
-        <source src="/music/%d.mp3" type="audio/mpeg">\n\
+        <source src="/static/music/%d.mp3" type="audio/mpeg">\n\
     </audio>\n\
     <object data="/static/player.swf" type="application/x-shockwave-flash" width=240 height=18>\n\
         <param value="/static/player.swf" name="movie">\n\
-        <param value="loop=no&amp;autostart=no&amp;soundfile=/music/'+str(self.id)+'.mp3&amp;" name="flashvars">\n\
+        <param value="loop=no&amp;autostart=no&amp;soundfile=/static/music/'+str(self.id)+'.mp3&amp;" name="flashvars">\n\
         <param value="false" name="menu">\n\
     </object>\n\
 '''
