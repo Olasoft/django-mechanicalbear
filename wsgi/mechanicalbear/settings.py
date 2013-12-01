@@ -112,18 +112,19 @@ STATICFILES_FINDERS = (
     #'django.contrib.staticfiles.finders.DefaultStorageFinder',
 )
 
-# Make a dictionary of default keys
-default_keys = { 'SECRET_KEY': '-be=zi+zdp95qk$nb@%-y*s_b$eypd+50=0ca4_dh1t*zf4$_n' }
-
-# Replace default keys with dynamic values if we are in OpenShift
-use_keys = default_keys
-if ON_OPENSHIFT:
-    imp.find_module('openshiftlibs')
-    import openshiftlibs
-    use_keys = openshiftlibs.openshift_secure(default_keys)
-
-# Make this unique, and don't share it with anybody.
-SECRET_KEY = use_keys['SECRET_KEY']
+## Make a dictionary of default keys
+#default_keys = { 'SECRET_KEY': '-be=zi+zdp95qk$nb@%-y*s_b$eypd+50=0ca4_dh1t*zf4$_n' }
+#
+## Replace default keys with dynamic values if we are in OpenShift
+#use_keys = default_keys
+#if ON_OPENSHIFT:
+#    imp.find_module('openshiftlibs')
+#    import openshiftlibs
+#    use_keys = openshiftlibs.openshift_secure(default_keys)
+#
+## Make this unique, and don't share it with anybody.
+#SECRET_KEY = use_keys['SECRET_KEY']
+SECRET_KEY = '-be=zi+zdp95qk$nb@%-y*s_b$eypd+50=0ca4_dh1t*zf4$_n'
 
 # List of callables that know how to import templates from various sources.
 TEMPLATE_LOADERS = (
