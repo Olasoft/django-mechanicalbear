@@ -13,9 +13,7 @@ import sql, post_twitter, post_tumblr, post_flickr, post_facebook
 from BeautifulSoup import BeautifulSoup
 from secrets.vk import token
 
-ON_OPENSHIFT = False
-if os.environ.has_key('OPENSHIFT_REPO_DIR'):
-    ON_OPENSHIFT = True
+ON_OPENSHIFT = os.environ.has_key('OPENSHIFT_REPO_DIR')
 
 if ON_OPENSHIFT:
     dryRun = False
