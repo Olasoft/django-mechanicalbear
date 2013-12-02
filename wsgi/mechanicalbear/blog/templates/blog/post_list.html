@@ -1,4 +1,13 @@
 {% extends 'blog/base.html' %}
+
+{% block title %}
+    {% if tag %}
+        {{ tag }} - {{ block.super }}
+    {% else %}
+        {{ block.super }}
+    {% endif %}
+{% endblock %}
+
 {% block content %}
     <div id="posts">
         {% for post in object_list %}
@@ -97,7 +106,7 @@ $(function() {
         window.isLoading = true;
 
         $.getJSON(
-            '/api/get_posts/' + page + '/{{ tag }}',
+            '/api/get_posts/' + page + '/{{ tag.slug }}',
             function(data) {
 
                 tmp.setTemplateElement("template", null, {filter_data: false});

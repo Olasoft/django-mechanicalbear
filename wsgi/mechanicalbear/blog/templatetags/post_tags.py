@@ -10,7 +10,7 @@ def tag_menu (active_tag = None):
     s = '';
     for tag in tags:
         c = ''
-        if tag.slug == active_tag:
+        if active_tag != "" and  tag.slug == active_tag.slug:
             c = " class='active' "
         s += '<a href="/tag/' + tag.get_url() + '"' + c + '>' + tag.name + '</a><br />'
     return s

@@ -1,5 +1,5 @@
 # coding: utf-8
-from blog.models import Post
+from blog.models import Post, Tag
 from django.shortcuts import redirect, render_to_response
 from django.views.generic import ListView, DetailView
 from django.http import Http404, HttpResponse
@@ -25,7 +25,9 @@ class PostListView(ListView):
         context = super(PostListView, self).get_context_data(**kwargs)
 
         if 'tag' in self.kwargs:
-            context['tag'] = self.kwargs['tag']
+            tag = self.kwargs['tag']
+            tag = Tag.objects.get(slug = tag)
+            context['tag'] = tag
 
         return context
 
