@@ -11,6 +11,9 @@
     font-family: 'Neucha';
     font-size: 20px;
 }
+#menu .active {
+    color: red;
+}
 .tags, .admin-panel {
     font-family: 'Neucha';
     font-size: 16px;
