@@ -76,7 +76,7 @@ def get_posts(request, page, tag = None):
     post_list = post_list.order_by('-datetime')[fr:to]
 
     jdata = serializers.serialize('json', post_list, indent=4, 
-        relations = ('images', 'videos', 'audios', ))
+        relations = ('images', 'videos', 'audios', 'tags', ))
     #print jdata
     return HttpResponse(jdata, content_type="application/json")
 

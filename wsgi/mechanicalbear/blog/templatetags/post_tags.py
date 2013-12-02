@@ -6,6 +6,7 @@ register = template.Library()
 @register.simple_tag
 def tag_menu ():
     tags = Tag.objects.all().filter(public = True)
+    tags = tags.order_by('name')
     s = '';
     for tag in tags:
         s += '<a href="/tag/' + tag.get_url() + '">' + tag.name + '</a><br />'

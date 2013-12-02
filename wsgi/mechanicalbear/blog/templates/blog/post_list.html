@@ -48,16 +48,21 @@
             {#/for}
             </div>
         {#/if}
+        <div class=datepub><a href="/{$T.post.pk}">{ $T.post.fields.datetime }</a></div>
         {#if $T.post.fields.tags != ''}
             <div class="tags">
             {#foreach $T.post.fields.tags as tag}
-                <div class=tag>
-                    {$T.tag.fields.name}
-                </div>
+                <span class=tag>
+                    <a href=/tag/{$T.tag.fields.slug}>{$T.tag.fields.name}</a>
+                </span>
             {#/for}
             </div>
         {#/if}
-        <div class=datepub><a href="/{$T.post.pk}">{ $T.post.fields.datetime }</a></div>
+        <div class="admin-panel">
+            {% if user.is_authenticated %}
+            <a href="/admin/blog/post/{$T.post.pk}">редактировать</p>
+            {% endif %}
+        </div>
     </div>
     {#/for}
 </textarea>
@@ -95,7 +100,7 @@ $(function() {
             '/api/get_posts/' + page + '/{{ tag }}',
             function(data) {
 
-                tmp.setTemplateElement("template");
+                tmp.setTemplateElement("template", null, {filter_data: false});
                 tmp.processTemplate(data);
                 container.append(tmp.html());
                 tmp.empty();

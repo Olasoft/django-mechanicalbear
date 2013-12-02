@@ -47,4 +47,9 @@
             <!-- Нет ярлыков-->
         {% endfor %}
     </div>
+    <div class="admin-panel">
+        {% if user.is_authenticated %}
+        <a href=/admin/blog/post/{{ post.id }}>редактировать</p>
+        {% endif %}
+    </div>
 </div>

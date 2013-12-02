@@ -21,7 +21,7 @@ class ImageAdmin(admin.ModelAdmin):
     list_display_links = ('id',)
 
 class TagAdmin(admin.ModelAdmin):
-    list_display = ('id', 'name', 'slug', 'public')
+    list_display = ('id', 'public', 'name', 'slug')
     list_display_links = ('name',)
     list_editable = ('public',)
 

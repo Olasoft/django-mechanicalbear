@@ -11,7 +11,7 @@
     font-family: 'Neucha';
     font-size: 20px;
 }
-.tags {
+.tags, .admin-panel {
     font-family: 'Neucha';
     font-size: 16px;
     text-align: right;
@@ -57,16 +57,20 @@ body {
     width: 900px;
 }
 .post {
-    border: 1px;
-    border-color: #ccc;
+    border: 2px;
+    border-color: #eee;
     border-style: solid;
-    border-radius: 25px;
+    border-radius: 50px;
     /*margin: 25px;*/
-    margin-bottom: 50px;
-    padding: 25px;
+    margin-bottom: 20px;
+    padding-top: 50px;
+    padding-bottom: 50px;
+    padding-left: 20px;
+    padding-right: 20px;
 }
 .videos {
     text-align: center;
+    padding-top: 20px;
 }
 .video_title {
     font: bold 14px sans-serif;
