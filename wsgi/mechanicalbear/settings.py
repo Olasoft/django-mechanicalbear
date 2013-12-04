@@ -14,6 +14,8 @@ if ON_OPENSHIFT:
         print("WARNING: The DEBUG environment is set to True.")
 else:
     DEBUG = True
+    #DEBUG = False
+
 TEMPLATE_DEBUG = DEBUG
 
 ADMINS = (

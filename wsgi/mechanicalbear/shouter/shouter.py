@@ -147,7 +147,9 @@ for entry in data['response']:
     attach_text = p.sub('', attach_text)
 
     sql.upsert('blog_post_tags', {'post_id': id, 'tag_id': tag_kid})
-    if  'insert' == sql.upsert('blog_post', {'id': id}, {'datetime': date, 'content': text, 'deleted': False}) and not dryRun:
+    act, pid = sql.upsert('blog_post', {'id': id}, {'datetime': date, 'content': text, 'deleted': False})
+            
+    if  'insert' == act and not dryRun:
 
         post_twitter.send(text, attach_text, "http://mechanicalbear.ru/" + str(id))
         post_facebook.send(id, image, video, text, attach_text)

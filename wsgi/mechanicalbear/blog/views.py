@@ -1,6 +1,6 @@
 # coding: utf-8
 from blog.models import Post, Tag
-from django.shortcuts import redirect, render_to_response
+from django.shortcuts import redirect, render_to_response, get_object_or_404
 from django.views.generic import ListView, DetailView
 from django.http import Http404, HttpResponse
 from random import randint
@@ -17,7 +17,8 @@ class PostListView(ListView):
 
         if 'tag' in self.kwargs:
             tag = self.kwargs['tag']
-            post_list = post_list.filter(tags__slug=tag)
+            tag = get_object_or_404(Tag, slug = tag)
+            post_list = post_list.filter(tags = tag)
 
         return post_list.order_by('-datetime')[:10]
 
@@ -33,6 +34,15 @@ class PostListView(ListView):
 
 class PostDetailView(DetailView):
     model = Post
+
+    def get_object(self):
+        try:
+            object = super(PostDetailView, self).get_object()
+            print "object"
+        except Exception as e:
+            raise Http404
+        else:
+            return object
 
 def random(request):
     blog_posts = Post.objects.exclude(deleted = True)
