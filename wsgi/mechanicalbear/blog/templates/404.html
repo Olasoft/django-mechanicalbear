@@ -1,24 +1,14 @@
-<style>
-.centerr
-{
-/*
-    border: solid 1px black;
-*/
-    position: fixed;
-    left: 50%;
-    top: 50%;
-    background-color: white;
-    z-index: 100;
+{% extends 'blog/base.html' %}
 
-    height: 400px;
-    margin-top: -200px;
+{% block title %}
+    404 - {{ block.super }}
+{% endblock %}
 
-    width: 600px;
-    margin-left: -300px;
-    text-align: center;
-}
-</style>
+{% block content %}
 <div class=centerr>
+    <a href="/">
     <img src="/static/bear-anger.jpg"><br />
     <h1>404</h1>
+    </a>
 </div>
+{% endblock %}
