@@ -2,3 +2,4 @@ RewriteEngine On
 RewriteRule ^application/static/(.+)$ /static/media/$1 [L]
 RewriteRule ^application/images/(.+)$ /static/images/$1 [L]
 RewriteRule ^application/music/(.+)$ /static/music/$1 [L]
+RewriteRule ^application/robots.txt$ /static/robots.txt [L]
