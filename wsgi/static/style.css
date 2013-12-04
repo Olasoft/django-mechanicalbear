@@ -151,11 +151,13 @@ audio {
     padding-bottom: 10px;
     color: #666;
     /*
-    */
     font-family: 'Chango';
+    */
+    font-family: 'Neucha';
 }
 .centerr
 {
+    /*
     position: fixed;
     left: 50%;
     top: 50%;
@@ -167,5 +169,7 @@ audio {
 
     width: 600px;
     margin-left: -300px;
+    */
     text-align: center;
+    font-family: 'Neucha';
 }
