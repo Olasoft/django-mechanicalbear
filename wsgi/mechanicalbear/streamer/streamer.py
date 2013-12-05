@@ -64,31 +64,6 @@ for line in p:
 
     plist.append(audiofile)
 
-def django_sender():
-    global qusers
-    qusers += 1
-    port = main_port + qusers
-    ports.append(port)
-    r = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-    r.bind((host, port))
-    #print 'Connected by %s %d (%d)' % (addr[0], port, len(ports))
-    yield header
-    print 'Connected by %s %d (%d)' % (host, port, len(ports))
-    while 1:
-        data = r.recv(200000)
-        if not data: 
-            print 'End sending data' #, addr
-            sleep(sleeptime)
-        try:
-            #yield data
-            yield len(data)
-        except Exception as e:
-            print 'Disconnected '
-            break
-    conn.close()
-    ports.remove(port)
-
-
 def datasender(conn, addr):
     global qusers
     qusers += 1
@@ -114,7 +89,6 @@ def datasender(conn, addr):
             sleep(sleeptime)
         try:
             conn.sendall(data)
-            #print 'send'
         except Exception as e:
             print 'Disconnected ', addr
             conn.close()
@@ -155,7 +129,7 @@ def stream():
     while 1:
         print 'start playlist'
         for track in plist:
-            print track['name'], track['bufsize']
+            #print track['name'], track['bufsize']
             r = open(track['path'])
             #r.seek(6000000)
             buf = r.read(track['bufsize'])
