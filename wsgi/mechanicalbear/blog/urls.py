@@ -9,7 +9,7 @@ from blog.views import PostListView, PostDetailView
 
 urlpatterns = patterns('',
     url(r'^$', PostListView.as_view(), name='list'),
-    #url(r'^ajax/$', 'blog.views.ajax', name='ajax'),
+    url(r'^radio.mp3$', 'blog.views.radio', name='radio'),
     url(r'^random/$', 'blog.views.random'),
     url(r'^(?P<pk>\d+)/$', PostDetailView.as_view(), name='post'), 
     url(r'^(?P<year>\d{4})/(?P<month>\d{2})/$', 'blog.views.doublerouble', name='monthly'),

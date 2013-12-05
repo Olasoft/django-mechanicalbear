@@ -7,7 +7,16 @@ from random import randint
 from datetime import date
 from django.core import serializers
 from django.forms.models import model_to_dict
-import json
+import json, os
+from time import sleep
+import socket
+
+ON_OPENSHIFT = os.environ.has_key('OPENSHIFT_PYTHON_IP')
+if ON_OPENSHIFT:
+    host = os.environ['OPENSHIFT_PYTHON_IP']
+else:
+    host = '127.0.0.1'
+port = 5555
 
 class PostListView(ListView):
     model = Post
@@ -92,3 +101,28 @@ def get_posts(request, page, tag = None):
     #print jdata
     return HttpResponse(jdata, content_type="application/json")
 
+def content_generator():
+    r = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    r.connect((host, port))
+    sleeptime = 1
+    while 1:
+        try:
+            data = r.recv(200000)
+            #sleep(sleeptime)
+            #if not data: 
+            #    print 'End sending data' #, addr
+            #    sleep(sleeptime)
+            yield data
+            #yield len(data)
+        except Exception as e:
+            print 'Disconnected '
+            break
+    r.close()
+
+def radio(request):
+    try:
+        response = HttpResponse(content_generator(), content_type="audio/mpeg")
+    except Exception as e:
+        print e
+
+    return response
