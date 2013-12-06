@@ -4,4 +4,4 @@
 # before the build step.  This script gets executed directly, so it
 # could be python, php, ruby, etc.
 
-pkill -f streamer.py
+#pkill -f streamer.py
