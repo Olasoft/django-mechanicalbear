@@ -17,15 +17,15 @@ if ON_OPENSHIFT:
     host = os.environ['OPENSHIFT_PYTHON_IP']
     datadir = os.environ['OPENSHIFT_DATA_DIR'] 
     dbfile  = os.path.join(datadir, 'db.sqlite3')
-    datadir = os.path.join(datadir, 'streamer')
-    playlist = os.path.join(datadir, u'list.txt')
+    playlist = os.path.join(datadir, 'streamer', u'list.txt')
+    datadir = os.path.join(datadir, 'music')
 else:
     host = '127.0.0.1'
     datadir = os.path.dirname(os.path.realpath(__file__))
     dbfile  = os.path.join(datadir, '../db.sqlite3')
     datadir = os.path.join(datadir, '../../static/music/')
     playlist = os.path.join(datadir, u'list.txt')
-main_port = 5555
+main_port = 17850
 
 qusers = 0
 ports = []
@@ -113,6 +113,7 @@ def listen():
         #lock.acquire()
     except Exception as e:
         print e
+        sys.exit()
         return
     #try:
     #    os.remove(tmp_sock)

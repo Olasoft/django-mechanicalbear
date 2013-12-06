@@ -38,6 +38,8 @@ class Audio(models.Model):
     def get_duration(self):
         m = self.duration / 60;
         s = self.duration % 60;
+
+        s = str(s) if s > 9 else '0' + str(s)
         return str(m) + ':' + str(s)
 
     def get_html(self):

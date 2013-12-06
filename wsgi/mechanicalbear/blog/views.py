@@ -16,7 +16,7 @@ if ON_OPENSHIFT:
     host = os.environ['OPENSHIFT_PYTHON_IP']
 else:
     host = '127.0.0.1'
-port = 5555
+port = 17850
 
 class PostListView(ListView):
     model = Post
