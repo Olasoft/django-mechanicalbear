@@ -40,8 +40,9 @@ class PostAdmin(admin.ModelAdmin):
     )
 
 class AudioAdmin(admin.ModelAdmin):
-    list_display = ('title', 'artist', 'duration')
+    list_display = ('radio', 'title', 'artist', 'get_duration')
     list_display_links = ('artist', 'title')
+    list_editable = ('radio',)
 
 class VideoAdmin(admin.ModelAdmin):
     list_display = ('title', 'descr')

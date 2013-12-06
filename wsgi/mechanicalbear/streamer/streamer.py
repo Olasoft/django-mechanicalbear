@@ -5,23 +5,27 @@ import threading
 from time import sleep
 from mutagen.mp3 import MP3 as mp3
 from mutagen.easyid3 import EasyID3
+#from bottle import route, run
 import socket, os, sys
-import urllib
+import sqlite3
 
 sleeptime = 1
+radiolimit = 30
 
 ON_OPENSHIFT = os.environ.has_key('OPENSHIFT_PYTHON_IP')
 if ON_OPENSHIFT:
     host = os.environ['OPENSHIFT_PYTHON_IP']
     datadir = os.environ['OPENSHIFT_DATA_DIR'] 
+    dbfile  = os.path.join(datadir, 'db.sqlite3')
     datadir = os.path.join(datadir, 'streamer')
+    playlist = os.path.join(datadir, u'list.txt')
 else:
     host = '127.0.0.1'
     datadir = os.path.dirname(os.path.realpath(__file__))
+    dbfile  = os.path.join(datadir, '../db.sqlite3')
     datadir = os.path.join(datadir, '../../static/music/')
+    playlist = os.path.join(datadir, u'list.txt')
 main_port = 5555
-
-playlist = os.path.join(datadir, u'list.txt')
 
 qusers = 0
 ports = []
@@ -125,47 +129,79 @@ def listen():
     #lock.release()
 
 def stream():
-    #s.bind(main_stream)
+    current_track = None
+
     while 1:
-        print 'start playlist'
+        con = sqlite3.connect(dbfile)
+        cur = con.cursor()
+        query = u'''
+            select
+                id,
+                artist,
+                title,
+                duration
+            from blog_audio
+            where radio = 1
+            order by id desc
+            limit %d
+        ''' % radiolimit
+
+        cur.execute(query)
+        plist = cur.fetchall()
+        cur.close()
+        con.close()
+
+        id = 0
         for track in plist:
-            #print track['name'], track['bufsize']
-            r = open(track['path'])
-            #r.seek(6000000)
-            buf = r.read(track['bufsize'])
-            
-            i = 0
-            while buf != '':
-                #s.flush()
-                #print i
-                for port in ports:
-                    #s.sendto(buf, port)
-                    s.sendto(buf, (host, port))
-                #print 'sendto'
+            if current_track is None or track[0] > current_track[0]:
+                current_track = track
+                break
+            id += 1
+        if id >= radiolimit:
+            current_track = plist[0]
 
-                buf = r.read(track['bufsize'])
-                i += 1
+        #print current_track
+        path = os.path.join(datadir, str(current_track[0]) + '.mp3')
+        name = '%s - %s' % (current_track[1], current_track[2])
 
-                sleep(sleeptime)
-            r.close()
+        r = open(path)
+        stat = os.stat(path)
+        bufsize = stat.st_size / track[3]
+        bufsize = int(bufsize * sleeptime) + 100
+
+        buf = r.read(bufsize)
+        
+        while buf != '':
+            for port in ports:
+                s.sendto(buf, (host, port))
+            buf = r.read(bufsize)
             sleep(sleeptime)
-        print 'end playlist'
 
-#@get('/stream.mp3')
-#def web():
-#    stream = urllib.urlopen('http://'+host+':'+str(main_port)+'/')
-#    response.content_type = 'audio/mpeg'
-#    return stream.read()
+        r.close()
+        sleep(sleeptime)
 
-#if __name__ == "__main__":
+#@route('/radio.mp3')
+#def content_generator():
+#    r = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+#    r.connect((host, main_port))
+#    sleeptime = 1
+#    while 1:
+#        try:
+#            data = r.recv(200000)
+#            yield data
+#        except Exception as e:
+#            print 'Disconnected '
+#            break
+#    r.close()
+
+
 listener = t(target = listen, args = ())
 streamer = t(target = stream, args = ())
 
 listener.start()
 streamer.start()
-#listen()
 
-#run(host='127.0.0.1', port = 5000, reloader=False) #, debug=True)
+#run(host = host, port = 5000, reloader=False)
 
-#listener.join()
-#streamer.join()
+listener.join()
+streamer.join()

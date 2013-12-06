@@ -30,9 +30,15 @@ class Audio(models.Model):
     artist   = models.CharField(u'Исполнитель', max_length = 1000)
     title    = models.CharField(u'Название', max_length = 1000)
     duration = models.BigIntegerField(u'Длительность')
+    radio    = models.BooleanField(u'Радио', default = True)
 
     def __unicode__(self):
         return self.artist + ' - ' + self.title
+
+    def get_duration(self):
+        m = self.duration / 60;
+        s = self.duration % 60;
+        return str(m) + ':' + str(s)
 
     def get_html(self):
         return '\n\
