@@ -52,7 +52,12 @@
             <div class="audios">
             {#foreach $T.post.fields.audios as audio}
                 <div class=audio>
-                    <div class=audio_info>{$T.audio.fields.artist} - {$T.audio.fields.title}</div>
+                    {#if $T.audio.fields.link != 'False'}
+                    <audio controls src={$T.audio.fields.link} preload=none ></audio>
+                    {#/if}
+                    <div class=audio_info>
+                        {$T.audio.fields.artist} - {$T.audio.fields.title}
+                    </div>
                 </div>
             {#/for}
             </div>

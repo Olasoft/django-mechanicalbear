@@ -26,7 +26,14 @@
     </div>
     <div class="audios">
         {% for audio in post.audios.all %}
-            {{ audio.get_html|safe }}
+            <div class=audio>
+                {% if audio.link != "False" %}
+                <audio controls src={{ audio.link}} preload=none></audio>
+                {% endif %}
+                <div class=audio_info>
+                {{ audio.artist }} - {{ audio.title }}
+                </div>
+            </div>
         {% empty %}
             <!-- Нет аудиозаписей -->
         {% endfor %}

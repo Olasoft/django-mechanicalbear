@@ -31,6 +31,7 @@ class Audio(models.Model):
     title    = models.CharField(u'Название', max_length = 1000)
     duration = models.BigIntegerField(u'Длительность')
     radio    = models.BooleanField(u'Радио', default = True)
+    link     = models.CharField(u'Ссылка', max_length = 1000, blank = True)
 
     def __unicode__(self):
         return self.artist + ' - ' + self.title

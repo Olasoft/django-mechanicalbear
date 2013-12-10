@@ -29,7 +29,9 @@ $(function(){
     })
   }
 });
+
 $(function() {$("#toTop").scrollToTop();});
+
 function toggle_radio_play() {
     if ($('#radio-control').text() == "вкл") {
         $('#radio-control').text("выкл");
