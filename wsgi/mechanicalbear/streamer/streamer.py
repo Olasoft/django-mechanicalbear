@@ -154,7 +154,7 @@ def stream():
 
         id = 0
         for track in plist:
-            if current_track is None or track[0] > current_track[0]:
+            if current_track is None or track[0] < current_track[0]:
                 current_track = track
                 break
             id += 1

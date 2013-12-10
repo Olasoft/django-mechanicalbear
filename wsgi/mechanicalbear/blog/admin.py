@@ -43,6 +43,7 @@ class AudioAdmin(admin.ModelAdmin):
     list_display = ('radio', 'title', 'artist', 'get_duration')
     list_display_links = ('artist', 'title')
     list_editable = ('radio',)
+    ordering = ('-id',)
 
 class VideoAdmin(admin.ModelAdmin):
     list_display = ('title', 'descr')

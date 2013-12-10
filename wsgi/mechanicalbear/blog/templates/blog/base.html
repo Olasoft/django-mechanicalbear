@@ -103,6 +103,7 @@
 <div class="footer">
     Olasoft 2011-2013
 </div>
+{% if not user.is_authenticated %}
 <div class="counters">
     <!-- begin of Top100 code -->
 <!--
@@ -167,5 +168,6 @@
 <noscript><div><img src="//mc.yandex.ru/watch/22905103" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
 <!-- /Yandex.Metrika counter -->
 </div>
+{% endif %}
 </body>
 </html>

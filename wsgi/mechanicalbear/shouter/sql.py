@@ -1,8 +1,22 @@
 # coding: utf-8
 import sqlite3
 import datetime
+import shutil
+import os
 
-con = sqlite3.connect('../db.sqlite3', isolation_level = 'IMMEDIATE')
+ON_OPENSHIFT = os.environ.has_key('OPENSHIFT_PYTHON_IP')
+if ON_OPENSHIFT:
+    datadir = os.environ['OPENSHIFT_DATA_DIR']
+    dborig  = os.path.join(datadir, 'db.sqlite3')
+    dbfile  = os.path.join(datadir, 'db.sqlite3.new')
+else:
+    datadir = os.path.dirname(os.path.realpath(__file__))
+    dborig  = os.path.join(datadir, '..', 'db.sqlite3')
+    dbfile  = os.path.join(datadir, '..', 'db.sqlite3.new')
+
+shutil.copyfile(dborig, dbfile)
+
+con = sqlite3.connect(dbfile) #, isolation_level = 'IMMEDIATE')
 cur = con.cursor()
 
 def v2q(v):
@@ -66,3 +80,5 @@ def commit():
 
 def close():
     con.close()
+    shutil.copyfile(dbfile, dborig)
+    os.remove(dbfile)
