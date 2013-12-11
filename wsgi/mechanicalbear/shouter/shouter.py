@@ -9,7 +9,7 @@ import datetime
 import pytz
 import re
 
-import sql, post_twitter, post_tumblr, post_flickr, post_facebook, prostopleer
+import sql, post_twitter, post_tumblr, post_flickr, post_facebook #, prostopleer
 from BeautifulSoup import BeautifulSoup
 from secrets.vk import token
 
@@ -114,7 +114,7 @@ for entry in data['response']:
                 duration = attach['audio']['duration']
 
                 # getting PROSTOPLEER link
-                track_link = prostopleer.get_track_url(artist, title, duration)
+                #track_link = prostopleer.get_track_url(artist, title, duration)
 
                 # downloading file
                 target = 'music/' + str(aid) + '.mp3'
@@ -131,7 +131,7 @@ for entry in data['response']:
                         i += 1
                         
                     os.symlink('../' + str(aid) + '.mp3', L)
-                sql.upsert('blog_audio', {'id': aid}, {'artist': artist, 'title': title, 'duration': duration, 'link': track_link})
+                sql.upsert('blog_audio', {'id': aid}, {'artist': artist, 'title': title, 'duration': duration, 'link': None})
                 sql.upsert('blog_post_audios', {'post_id': id, 'audio_id': aid})
                 sql.upsert('blog_post_tags', {'post_id': id, 'tag_id': tag_aid})
                 #sys.exit()

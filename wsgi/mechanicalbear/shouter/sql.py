@@ -26,6 +26,8 @@ def v2q(v):
         return str(v)
     if type(v) == bool:
         return str(v)
+    if v == None:
+        return None
 
     v = v.encode("utf8").replace('\'', '\'\'')
     return v
