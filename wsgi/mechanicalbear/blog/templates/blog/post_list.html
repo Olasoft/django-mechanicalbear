@@ -52,9 +52,7 @@
             <div class="audios">
             {#foreach $T.post.fields.audios as audio}
                 <div class=audio>
-                    {#if $T.audio.fields.link != 'False'}
-                    <audio controls src={$T.audio.fields.link} preload=none ></audio>
-                    {#/if}
+                    <audio controls src="/static/music/{$T.audio.pk}.mp3" preload=none ></audio>
                     <div class=audio_info>
                         {$T.audio.fields.artist} - {$T.audio.fields.title}
                     </div>

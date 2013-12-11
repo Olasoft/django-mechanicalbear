@@ -27,9 +27,7 @@
     <div class="audios">
         {% for audio in post.audios.all %}
             <div class=audio>
-                {% if audio.link != "False" %}
-                <audio controls src={{ audio.link}} preload=none></audio>
-                {% endif %}
+                <audio controls src="/static/music/{{ audio.id }}.mp3" preload=none></audio>
                 <div class=audio_info>
                 {{ audio.artist }} - {{ audio.title }}
                 </div>
