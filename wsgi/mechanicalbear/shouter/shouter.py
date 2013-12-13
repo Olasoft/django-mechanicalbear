@@ -160,12 +160,12 @@ for entry in data['response']:
         if not dryRun:
             post_twitter.send(text, attach_text, "http://mechanicalbear.ru/" + str(id))
             post_facebook.send(id, text, image, video, attach_text)
+            post_delicious.send(id, text + ' ' + attach_text, tags)
 
             if image > 0:
                 post_tumblr.send(id, image, date)
                 post_flickr.send(id, image, text)
-        else:
-            post_delicious.send(id, text + ' ' + attach_text, tags)
+        #else:
     #break
 
     sql.commit()
