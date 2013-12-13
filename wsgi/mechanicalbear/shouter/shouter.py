@@ -147,11 +147,12 @@ for entry in data['response']:
     query = 
     print(query)
     print ("id: " + str(id))
-    print ("text: " + text)
     '''
     p = re.compile(r'<.*?>')
-    text = p.sub('', text)
+    #text = p.sub('', text)
     attach_text = p.sub('', attach_text)
+
+    print ("text: " + text)
 
     sql.upsert('blog_post_tags', {'post_id': id, 'tag_id': tag_kid})
     act, pid = sql.upsert('blog_post', {'id': id}, {'datetime': date, 'content': text, 'deleted': False})
