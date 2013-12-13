@@ -6,12 +6,14 @@ import sys
 
 facebook_graph = facebook.GraphAPI(user_token)
 
-def send(id, image, video, text, audio):
+def send(id, text, image = None, video = '', audio = ''):
+    privacy = {'value': 'EVERYONE'}
     attach = {
       "link": 'http://mechanicalbear.ru/' + str(id),
       "name": text.encode("utf8"),
       #"caption": 'test',
       "description": audio.encode("utf8"),
+      "privacy": privacy,
     }
     if image:
       attach["picture"] = 'http://mechanicalbear.ru/images/' + str(image) + '.jpg'

@@ -9,7 +9,7 @@ import datetime
 import pytz
 import re
 
-import sql, post_twitter, post_tumblr, post_flickr, post_facebook #, prostopleer
+import sql, post_twitter, post_tumblr, post_flickr, post_facebook, post_delicious #, prostopleer
 from BeautifulSoup import BeautifulSoup
 from secrets.vk import token
 
@@ -40,6 +40,7 @@ for entry in data['response']:
     id = entry['id']
     text = entry['text']
     date = entry['date']
+    tags = []
     #print(date)
     #print (json.dumps(entry, sort_keys=True, indent=2))
     #print(datestr(date, 'yyyymmdd'))
@@ -74,6 +75,7 @@ for entry in data['response']:
                 sql.upsert('blog_post_images', {'post_id': id, 'image_id': pid})
                 sql.upsert('blog_post_tags', {'post_id': id, 'tag_id': tag_pid})
                 #text += '\n<div class=image><img src=' + src + ' /></div>'
+                tags.append('picrures')
                 if image == 0:
                     image = pid
 
@@ -101,6 +103,7 @@ for entry in data['response']:
                     sql.upsert('blog_post_videos', {'post_id': id, 'video_id': vid})
                     sql.upsert('blog_post_tags', {'post_id': id, 'tag_id': tag_vid})
                 attach_text = attach_text + " " + title
+                tags.append('video')
                 if video == 0:
                     video = vid
 
@@ -136,6 +139,7 @@ for entry in data['response']:
                 sql.upsert('blog_post_tags', {'post_id': id, 'tag_id': tag_aid})
                 #sys.exit()
                 attach_text = attach_text + " " + artist + " - " + title + "<br />"
+                tags.append('audio')
                     
     except KeyError:
         print ("No attachments")
@@ -152,14 +156,16 @@ for entry in data['response']:
     sql.upsert('blog_post_tags', {'post_id': id, 'tag_id': tag_kid})
     act, pid = sql.upsert('blog_post', {'id': id}, {'datetime': date, 'content': text, 'deleted': False})
             
-    if  'insert' == act and not dryRun:
+    if  'insert' == act:
+        if not dryRun:
+            post_twitter.send(text, attach_text, "http://mechanicalbear.ru/" + str(id))
+            post_facebook.send(id, text, image, video, attach_text)
 
-        post_twitter.send(text, attach_text, "http://mechanicalbear.ru/" + str(id))
-        post_facebook.send(id, image, video, text, attach_text)
-
-        if image > 0:
-            post_tumblr.send(id, image, date)
-            post_flickr.send(id, image, text)
+            if image > 0:
+                post_tumblr.send(id, image, date)
+                post_flickr.send(id, image, text)
+        else:
+            post_delicious.send(id, text + ' ' + attach_text, tags)
     #break
 
     sql.commit()
