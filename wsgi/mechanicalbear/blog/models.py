@@ -94,6 +94,7 @@ class Tag(models.Model):
     name  = models.CharField(u'Имя', max_length = 100)
     slug  = models.CharField(u'SLUG', max_length = 100, null = True, unique = True)
     public= models.BooleanField(u'Публичный', default = True)
+    descr = models.TextField(u'Описание', max_length = 10000, blank = True)
 
     def __unicode__(self):
         return self.name

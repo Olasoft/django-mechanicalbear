@@ -12,5 +12,5 @@ def tag_menu (active_tag = None):
         c = ''
         if active_tag != "" and  tag.slug == active_tag.slug:
             c = " class='active' "
-        s += '<a href="/tag/' + tag.get_url() + '"' + c + '>' + tag.name + '</a><br />'
+        s += '<a href="/tag/' + tag.get_url() + '"' + c + '>' + tag.name + '</a><br />\n    '
     return s

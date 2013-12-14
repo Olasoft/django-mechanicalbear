@@ -1,10 +1,20 @@
 {% extends 'blog/base.html' %}
-
+ 
 {% block title %}
-    {% if tag %}
-        {{ tag }} - {{ block.super }}
-    {% else %}
-        {{ block.super }}
+    {% if tag %}{{ tag }} - {{ block.super }}
+    {% else %}{{ block.super }}
+    {% endif %}
+{% endblock %}
+
+{% block keywords %}
+    {% if tag %}{{ tag }}
+    {% else %}{{ block.super }}
+    {% endif %}
+{% endblock %}
+
+{% block description %}
+    {% if tag.descr %}{{ tag.descr }}
+    {% else %}{{ block.super }}
     {% endif %}
 {% endblock %}
 

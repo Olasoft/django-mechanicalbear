@@ -1,13 +1,16 @@
-<!DOCTYPE html>
-{% load staticfiles %}
-{% load post_tags %}
+<!DOCTYPE html>{% load staticfiles post_tags %}
 <html lang="ru">
     <head>
+
+        <title>{% spaceless %}{% block title %}Мишка Механический{% endblock %}{% endspaceless %}</title>
+        <meta name='description' content='{% spaceless %}{% block description %}бесконечная лента красивых картинок, забавного видео, интересной музыки и любви{% endblock %}{% endspaceless %}' />
+        <meta name='keywords' content='{% spaceless %}{% block keywords %} {% endblock %}{% endspaceless %}' />
+
         <meta charset="utf-8" />
+
         <meta name='yandex-verification' content='581a44356acdc5da' />
         <meta name="google-site-verification" content="iGCGhUogmvwN1eArcdsASnGOyg7ytmZHqYfUBWICVG8" />
-        <title>{% block title %}Мишка Механический{% endblock %}</title>
-	<meta name='keywords' content='регби любовь рокнролл' />
+
         <link href={% static "bootstrap/css/bootstrap.css" %} rel="stylesheet">
         <link href={% static "bootstrap/css/bootstrap-responsive.css" %} rel="stylesheet">
         <link href={% static "style.css" %} rel="stylesheet">
@@ -18,15 +21,7 @@
         <script src={% static "jquery.js" %} type="text/javascript"></script>
         <script src={% static "bootstrap/js/bootstrap.js" %} type="text/javascript"></script>
         <script src={% static "main.js" %} type="text/javascript"></script>
-
-        {% block extrahead %}
-        {% endblock %}
-        {% comment %}
-        <script type="text/javascript">
-        {% block jquery %}
-        {% endblock %}
-        </script>
-        {% endcomment %}
+        {% block extrahead %}{% endblock %}
     </head>
 <body>
 <div class="share42init" data-top2="150"></div>

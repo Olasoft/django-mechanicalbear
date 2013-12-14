@@ -47,7 +47,6 @@ class PostDetailView(DetailView):
     def get_object(self):
         try:
             object = super(PostDetailView, self).get_object()
-            print "object"
         except Exception as e:
             raise Http404
         else:
@@ -78,11 +77,11 @@ def doublerouble(request, year, month, slug):
         month += 1
 
     to = date(year, month, 1)
-    print str(fr) + " " + str(to) + " " + slug
+    #print str(fr) + " " + str(to) + " " + slug
     blog_post = Post.objects.exclude(deleted = True).filter(datetime__range = (fr, to), slug = slug)
 
     if blog_post.count() == 0:
-        print blog_post.count()
+        #print blog_post.count()
         raise Http404
 
     return redirect('post', blog_post[0].id)
@@ -108,12 +107,7 @@ def content_generator():
     while 1:
         try:
             data = r.recv(200000)
-            #sleep(sleeptime)
-            #if not data: 
-            #    print 'End sending data' #, addr
-            #    sleep(sleeptime)
             yield data
-            #yield len(data)
         except Exception as e:
             print 'Disconnected '
             break
