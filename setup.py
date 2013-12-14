@@ -16,5 +16,6 @@ setup(
 #        'facebook-sdk>=0.4.0',
 #        'python-flickr>=0.3.0',
 #        'BeautifulSoup',
+#        'south',
 #    ],
 )

@@ -6,6 +6,9 @@ import imp, os
 ON_OPENSHIFT = False
 if os.environ.has_key('OPENSHIFT_REPO_DIR'):
     ON_OPENSHIFT = True
+ON_PRODUCTION = False
+if os.uname()[1] == 'at-tmn':
+    ON_PRODUCTION = True
 
 PROJECT_DIR = os.path.dirname(os.path.realpath(__file__))
 if ON_OPENSHIFT:
@@ -34,6 +37,15 @@ if ON_OPENSHIFT:
             'PASSWORD': '',                  # Not used with sqlite3.
             'HOST': '',                      # Set to empty string for localhost. Not used with sqlite3.
             'PORT': '',                      # Set to empty string for default. Not used with sqlite3.
+        }
+    }
+elif ON_PRODUCTION:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.mysql',
+            'NAME':   'site1',
+            'USER': 'root',
+            'PASSWORD': 'toor',
         }
     }
 else:
