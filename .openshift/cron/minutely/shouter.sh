@@ -20,6 +20,6 @@ cd $OPENSHIFT_REPO_DIR/wsgi/mechanicalbear/shouter
 /bin/env python shouter.py >> /tmp/shouter.run 2>&1
 #cp ../db.sqlite3 $OPENSHIFT_DATA_DIR
 
-rm /tmp/shouter.run
+mv /tmp/shouter.run $OPENSHIFT_DATA_DIR/shouter.log
 
 date > /tmp/last_date_cron_ran
