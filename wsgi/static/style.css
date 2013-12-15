@@ -11,6 +11,11 @@
     font-family: 'Neucha';
     font-size: 20px;
 }
+a.hashtag {
+    /*
+    color: grey;
+    */
+}
 #menu .active {
     color: red;
 }

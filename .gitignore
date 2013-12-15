@@ -4,6 +4,7 @@
 *.orig
 *~
 *_password.py
+wsgi/mechanicalbear/.hg*
 
 .project
 .pydevproject

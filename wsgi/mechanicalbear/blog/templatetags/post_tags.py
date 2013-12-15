@@ -1,5 +1,6 @@
 from django import template
 from blog.models import Tag
+import re
 
 register = template.Library()
 
@@ -14,3 +15,7 @@ def tag_menu (active_tag = None):
             c = " class='active' "
         s += '<a href="/tag/' + tag.slug + '"' + c + ' title="' + tag.descr + '">' + tag.name + '</a><br />\n    '
     return s
+
+@register.filter 
+def hashes_to_links (value): 
+    return re.sub(r"#(?!\d)(\w+)", r'<a href="/tag/\1" class=hashtag>#\1</a>', value)

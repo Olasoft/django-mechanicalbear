@@ -7,9 +7,10 @@ from random import randint
 from datetime import date
 from django.core import serializers
 from django.forms.models import model_to_dict
+from django.db.models import Q
 import json, os
 from time import sleep
-import socket
+import socket, re
 
 ON_OPENSHIFT = os.environ.has_key('OPENSHIFT_PYTHON_IP')
 if ON_OPENSHIFT:
@@ -26,7 +27,7 @@ class PostListView(ListView):
 
         if 'tag' in self.kwargs:
             tag = self.kwargs['tag']
-            tag = get_object_or_404(Tag, slug = tag)
+            tag = get_object_or_404(Tag, Q(slug = tag) | Q(name = tag))
             post_list = post_list.filter(tags = tag)
 
         return post_list.order_by('-datetime')[:10]
@@ -36,7 +37,7 @@ class PostListView(ListView):
 
         if 'tag' in self.kwargs:
             tag = self.kwargs['tag']
-            tag = Tag.objects.get(slug = tag)
+            tag = Tag.objects.get(Q(slug = tag) | Q(name = tag))
             context['tag'] = tag
 
         return context
@@ -97,7 +98,8 @@ def get_posts(request, page, tag = None):
 
     jdata = serializers.serialize('json', post_list, indent=4, 
         relations = ('images', 'videos', 'audios', 'tags', ))
-    #print jdata
+    #print type(jdata)
+    jdata = re.sub(r"#(?!\d)(\w+)", r"<a href='/tag/\1' class=hashtag>#\1</a>", jdata)
     return HttpResponse(jdata, content_type="application/json")
 
 def content_generator():

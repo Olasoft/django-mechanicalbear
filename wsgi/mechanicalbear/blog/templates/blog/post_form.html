@@ -1,3 +1,4 @@
+{% load post_tags %}
 <div class="post">
     {% if post.title %}
         <h2>{{post.title}}</h2>
@@ -8,7 +9,7 @@
     {% else %}
     <div class="post_content">
     {% endif %}
-        <p>{{ post.content|safe|linebreaks }}</p>
+        <p>{{ post.content|hashes_to_links|safe|linebreaks}}</p>
         <div class="images">
             {% for image in post.images.all %}
                 {{ image.get_html|safe }}

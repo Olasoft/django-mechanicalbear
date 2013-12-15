@@ -24,17 +24,41 @@ _VK_API_URL = "https://api.vk.com/method/"
 wurl = _VK_API_URL + "wall.get?access_token=" + token
 vurl = _VK_API_URL + "video.get?videos=%d_%d&access_token=" + token
 
+all_tags = {}
+def add_tag(tag, name = ''):
+    global all_tags
+    if not tag in all_tags:
+        query = u'SELECT id FROM `blog_tag` WHERE `slug` = \'%s\'' % tag
+        sql.cur.execute(query)
+
+        data = sql.cur.fetchone()
+        if data is None:
+            query = u'SELECT id FROM `blog_tag` WHERE `name` = \'%s\'' % tag
+            sql.cur.execute(query)
+            data = sql.cur.fetchone()
+            if len(name) and data is None:
+                query = u'SELECT id FROM `blog_tag` WHERE `name` = \'%s\'' % name
+                sql.cur.execute(query)
+                data = sql.cur.fetchone()
+        if data is None:
+            if not len(name):
+                name = tag
+            query = u"INSERT INTO `blog_tag` (`slug`, `name`) VALUES ('%s', '%s')" % (tag, name)
+            sql.cur.execute(query)
+            tag_id = sql.cur.lastrowid
+        else:
+            tag_id = data[0]
+
+        all_tags[tag] = tag_id
+
+
 response = urllib.urlopen(wurl)
 data = response.read()
 data = json.loads(data.decode("utf8")) #content_type_opts.get("charset", "utf-8")))
 
 #print (json.dumps(data, sort_keys=True, indent=2))
-act, tag_pid = sql.upsert('blog_tag', {'slug': 'pictures'}, {'name': u'картинки', })
-act, tag_aid = sql.upsert('blog_tag', {'slug': 'music'},    {'name': u'саунд', })
-act, tag_vid = sql.upsert('blog_tag', {'slug': 'video'},    {'name': u'видео', })
-act, tag_kid = sql.upsert('blog_tag', {'slug': 'vk'},       {'name': u'вкашка', })
 
-for entry in data['response']:
+for entry in data['response'][::-1]:
     if isinstance(entry, (int, float, complex)):
         continue
     id = entry['id']
@@ -73,9 +97,10 @@ for entry in data['response']:
 
                 sql.upsert('blog_image', {'id': pid}, {'text': text, 'width': width, 'height': height})
                 sql.upsert('blog_post_images', {'post_id': id, 'image_id': pid})
-                sql.upsert('blog_post_tags', {'post_id': id, 'tag_id': tag_pid})
                 #text += '\n<div class=image><img src=' + src + ' /></div>'
-                tags.append('picrures')
+                add_tag('pictures', 'картинки')
+                tags.append('pictures')
+
                 if image == 0:
                     image = pid
 
@@ -101,9 +126,9 @@ for entry in data['response']:
                     player = d['response'][1]['player']
                     sql.upsert('blog_video', {'id': vid}, {'oid': oid, 'player': player, 'title': title, 'descr': descr})
                     sql.upsert('blog_post_videos', {'post_id': id, 'video_id': vid})
-                    sql.upsert('blog_post_tags', {'post_id': id, 'tag_id': tag_vid})
+                    add_tag('video', 'видео')
+                    tags.append('video')
                 attach_text = attach_text + " " + title
-                tags.append('video')
                 if video == 0:
                     video = vid
 
@@ -136,10 +161,10 @@ for entry in data['response']:
                     os.symlink('../' + str(aid) + '.mp3', L)
                 sql.upsert('blog_audio', {'id': aid}, {'artist': artist, 'title': title, 'duration': duration, 'link': None})
                 sql.upsert('blog_post_audios', {'post_id': id, 'audio_id': aid})
-                sql.upsert('blog_post_tags', {'post_id': id, 'tag_id': tag_aid})
+                add_tag('music', 'саунд')
+                tags.append('music')
                 #sys.exit()
                 attach_text = attach_text + " " + artist + " - " + title + "<br />"
-                tags.append('audio')
                     
     except KeyError:
         print ("No attachments")
@@ -152,9 +177,21 @@ for entry in data['response']:
     #text = p.sub('', text)
     attach_text = p.sub('', attach_text)
 
-    print ("text: " + text)
+    #print ("text: " + text)
 
-    sql.upsert('blog_post_tags', {'post_id': id, 'tag_id': tag_kid})
+    #add_tag('vk', 'вкашка')
+    #tags.append('vk')
+
+    t = {tag.strip("#") for tag in text.split() if tag.startswith("#")}
+    for tag in t:
+        add_tag(tag)
+        tags.append(tag)
+
+    print id, tags
+    for tag in tags:
+        if tag in all_tags:
+            sql.upsert('blog_post_tags', {'post_id': id, 'tag_id': all_tags[tag]})
+
     act, pid = sql.upsert('blog_post', {'id': id}, {'datetime': date, 'content': text, 'deleted': False})
             
     if  'insert' == act:
