@@ -99,7 +99,7 @@ def get_posts(request, page, tag = None):
     jdata = serializers.serialize('json', post_list, indent=4, 
         relations = ('images', 'videos', 'audios', 'tags', ))
     #print type(jdata)
-    jdata = re.sub(r"#(?!\d)(\w+)", r"<a href='/tag/\1' class=hashtag>#\1</a>", jdata)
+    jdata = re.sub(r"#(?!\d)(\S+)", r"<a href='/tag/\1' class=hashtag>#\1</a>", jdata)
     return HttpResponse(jdata, content_type="application/json")
 
 def content_generator():

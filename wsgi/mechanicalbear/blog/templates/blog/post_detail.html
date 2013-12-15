@@ -1,6 +1,6 @@
 {% extends 'blog/base.html' %}
 
-{% load comments %}
+{% comment %}{% load comments %}{% endcomment %}
 
 {% block title %}
     {% if post.title %}
@@ -26,11 +26,12 @@
 
 {% block content %}
     {% include 'blog/post_form.html' %}
-
+    {% comment %}
     <div class='comments'>
         {% render_comment_list for post %}
     </div>
     <div class='comment_form'>
         {% render_comment_form for post %}
     </div>
+    {% endcomment %}
 {% endblock %}

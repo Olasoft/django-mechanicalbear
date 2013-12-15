@@ -182,7 +182,7 @@ for entry in data['response'][::-1]:
     #add_tag('vk', 'вкашка')
     #tags.append('vk')
 
-    t = {tag.strip("#") for tag in text.split() if tag.startswith("#")}
+    t = set([i[1:] for i in text.split() if i.startswith("#")])
     for tag in t:
         add_tag(tag)
         tags.append(tag)

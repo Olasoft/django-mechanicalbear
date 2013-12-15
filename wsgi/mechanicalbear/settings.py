@@ -177,7 +177,7 @@ INSTALLED_APPS = (
     # 'django.contrib.admindocs',
     'blog',
     'south',
-    'django.contrib.comments',
+    #'django.contrib.comments',
 )
 
 # A sample logging configuration. The only tangible logging

@@ -18,4 +18,4 @@ def tag_menu (active_tag = None):
 
 @register.filter 
 def hashes_to_links (value): 
-    return re.sub(r"#(?!\d)(\w+)", r'<a href="/tag/\1" class=hashtag>#\1</a>', value)
+    return re.sub(r"#(?!\d)(\S+)", r'<a href="/tag/\1" class=hashtag>#\1</a>', value)
