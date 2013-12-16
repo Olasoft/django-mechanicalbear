@@ -195,10 +195,11 @@ for entry in data['response'][::-1]:
         if tag in all_tags:
             sql.upsert('blog_post_tags', {'post_id': id, 'tag_id': all_tags[tag]})
 
-    act, pid = sql.upsert('blog_post', {'id': id}, {'datetime': date, 'content': text, 'deleted': False})
+    act, pid = sql.upsert('blog_post', {'id': id}, {'datetime': date, 'content': text, 'deleted': False, 'showAds': False})
             
     if  'insert' == act:
         if not dryRun:
+            text = re.sub('<[^>]*>', ' ', text)
             post_twitter.send(text, attach_text, "http://mechanicalbear.ru/" + str(id))
             post_facebook.send(id, text, image, video, attach_text)
             post_delicious.send(id, text + ' ' + attach_text, tags)

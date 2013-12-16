@@ -66,7 +66,8 @@ def upsert(table, id, values = {}):
         for k, v in id.items():
             _v += ', `%s` =\'%s\'' % (k, v2q(v))
         for k, v in values.items():
-            if k == 'deleted':
+            #if k == 'deleted':
+            if type(v) == bool:
                 continue
             _v += ', `%s` =\'%s\'' % (k, v2q(v))
         query = query.replace('{1}', _v[2:].decode("utf8"))
