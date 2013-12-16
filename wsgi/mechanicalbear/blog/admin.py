@@ -59,7 +59,7 @@ class TagAdmin(admin.ModelAdmin):
     list_display = ('id', 'public', 'name', 'slug')
     list_display_links = ('name',)
     list_editable = ('public',)
-    ordering = ('name',)
+    ordering = ['name']
 
 class AdsAdmin(admin.ModelAdmin):
     list_display = ('id', 'name', 'content')

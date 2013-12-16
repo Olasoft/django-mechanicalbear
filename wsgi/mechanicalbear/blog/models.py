@@ -84,7 +84,13 @@ class Video(models.Model):
 </div>' % (self.player, self.title, self.descr)
     #<iframe src="http://vk.com/video_ext.php?oid='+self.oid+'&id='+self.id+'&hash='+self.aid+'&hd=1" width="607" height="360" frameborder="0"></iframe>\n\
 
+class TagManager(models.Manager):
+    def get_query_set(self):
+        return super(TagManager, self).get_query_set().annotate(pubcount = models.Count('post__tags')).order_by('-pubcount', 'name')
+
 class Tag(models.Model):
+    objects = TagManager()
+
     class Meta:
         verbose_name = 'ярлык'
         verbose_name_plural = 'Ярлыки'
