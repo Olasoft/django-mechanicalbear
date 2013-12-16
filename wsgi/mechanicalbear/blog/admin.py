@@ -1,4 +1,5 @@
 # coding: utf-8
+from django.db import models
 from django.contrib import admin
 from blog.models import Post, Image, Audio, Video, Tag, Ads
 
@@ -56,10 +57,19 @@ class ImageAdmin(admin.ModelAdmin):
     list_display_links = ('id',)
 
 class TagAdmin(admin.ModelAdmin):
-    list_display = ('id', 'public', 'name', 'slug')
+    list_display = ('id', 'public', 'name', 'slug', 'post_count')
     list_display_links = ('name',)
     list_editable = ('public',)
-    ordering = ['name']
+    #ordering = ['post_count']
+
+    def queryset(self, request):
+        return Tag.objects.annotate(post_count = models.Count('post__tags'))
+
+    def post_count(self, inst):
+        return inst.post_count
+
+    post_count.admin_order_field = 'post_count'
+    post_count.short_description = 'Публикации'
 
 class AdsAdmin(admin.ModelAdmin):
     list_display = ('id', 'name', 'content')
