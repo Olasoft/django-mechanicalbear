@@ -1,6 +1,6 @@
 # coding: utf-8
 from django.contrib import admin
-from blog.models import Post, Image, Audio, Video, Tag
+from blog.models import Post, Image, Audio, Video, Tag, Ads
 
 class PostAdmin(admin.ModelAdmin):
     list_display = ('datetime', 'id', 'slug', 'title', 'deleted') #, 'content')
@@ -23,9 +23,11 @@ class PostAdmin(admin.ModelAdmin):
         }),
         ('Дополнительно', {
             'fields': (
-                'datetime',
-                'slug',
                 'deleted',
+                'slug',
+                'showAds',
+                'ads',
+                'datetime',
             ),
             'classes': ('collapse', 'wide', 'extrapretty'),
         }),
@@ -59,9 +61,16 @@ class TagAdmin(admin.ModelAdmin):
     list_editable = ('public',)
     ordering = ('name',)
 
+class AdsAdmin(admin.ModelAdmin):
+    list_display = ('id', 'name', 'content')
+    list_display_links = ('name',)
+    #list_editable = ('public',)
+    ordering = ('name',)
+
 admin.site.register(Post, PostAdmin)
 admin.site.register(Image, ImageAdmin)
 admin.site.register(Audio, AudioAdmin)
 admin.site.register(Video, VideoAdmin)
 admin.site.register(Tag, TagAdmin)
+admin.site.register(Ads, AdsAdmin)
 

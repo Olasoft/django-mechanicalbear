@@ -11,10 +11,20 @@
     font-family: 'Neucha';
     font-size: 20px;
 }
-a.hashtag {
+.hashtag {
     /*
     color: grey;
     */
+}
+.ads {
+    margin-top: 40px;
+    /*
+    border: 1px solid #f00;
+    */
+}
+.ad {
+    margin: 0 auto;
+    text-align: center;
 }
 #menu .active {
     color: red;

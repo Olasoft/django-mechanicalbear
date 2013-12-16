@@ -1,5 +1,6 @@
 from django import template
-from blog.models import Tag
+from blog.models import Tag, Ads
+from random import randint
 import re
 
 register = template.Library()
@@ -15,6 +16,26 @@ def tag_menu (active_tag = None):
             c = " class='active' "
         s += '<a href="/tag/' + tag.slug + '"' + c + ' title="' + tag.descr + '">' + tag.name + '</a><br />\n    '
     return s
+
+@register.simple_tag
+def ads (post):
+    s = ''
+    if post.showAds:
+        s += '<div class=ads>'
+        if post.ads.count():
+            ads = post.ads.all()
+        else:
+            ads = Ads.objects.all()
+
+        if ads.count():
+            s += '<div class=ad>'
+            random_index = randint(0, ads.count() - 1)
+            s += ads[random_index].content
+            s += '</div>'
+        s += '</div>'
+
+    return s
+
 
 @register.filter 
 def hashes_to_links (value): 

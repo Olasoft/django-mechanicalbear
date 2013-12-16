@@ -1,4 +1,5 @@
 {% extends 'blog/base.html' %}
+{% load post_tags %}
 
 {% comment %}{% load comments %}{% endcomment %}
 
@@ -26,6 +27,7 @@
 
 {% block content %}
     {% include 'blog/post_form.html' %}
+    {% ads post %}
     {% comment %}
     <div class='comments'>
         {% render_comment_list for post %}

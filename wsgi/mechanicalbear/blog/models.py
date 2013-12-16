@@ -104,23 +104,37 @@ class Tag(models.Model):
             return str(self.id)
         return self.slug
 
+class Ads(models.Model):
+    class Meta:
+        verbose_name = 'реклама'
+        verbose_name_plural = 'Рекламные материалы'
+
+    name  = models.CharField(u'Имя', max_length = 100)
+    content = models.TextField(u'Содержание', max_length = 10000, blank = True)
+
+    def __unicode__(self):
+        return self.name
 
 class Post(models.Model):
     class Meta:
         verbose_name = 'публикация'
         verbose_name_plural = 'Публикации'
 
-    title = models.CharField(u'Заголовок', max_length = 1000, blank = True, null = True)
-    datetime = models.DateTimeField(u'Дата публикации')
-    content = models.TextField(u'Содержание', max_length = 10000, blank = True)
-    deleted = models.BooleanField(u'Удалено', default = False)
-    slug = models.CharField(u'Адрес URL', max_length = 255, blank = True, null = True)
+    title       = models.CharField(u'Заголовок', max_length = 1000, blank = True, null = True)
+    datetime    = models.DateTimeField(u'Дата публикации')
+    content     = models.TextField(u'Содержание', max_length = 10000, blank = True)
+    deleted     = models.BooleanField(u'Удалено', default = False)
+    slug        = models.CharField(u'Адрес URL', max_length = 255, blank = True, null = True)
 
-    images = models.ManyToManyField(Image, blank = True)
-    audios = models.ManyToManyField(Audio, blank = True)
-    videos = models.ManyToManyField(Video, blank = True)
+    showAds     = models.BooleanField(u'Показывать рекламу', default = False)
 
-    tags   = models.ManyToManyField(Tag, blank = True)
+    ads         = models.ManyToManyField(Ads, blank = True)
+
+    images      = models.ManyToManyField(Image, blank = True)
+    audios      = models.ManyToManyField(Audio, blank = True)
+    videos      = models.ManyToManyField(Video, blank = True)
+
+    tags        = models.ManyToManyField(Tag, blank = True)
 
     def __unicode__(self):
         return str(self.id) + ' ' + self.content[:100]
