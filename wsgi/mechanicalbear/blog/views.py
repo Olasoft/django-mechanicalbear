@@ -42,6 +42,16 @@ class PostListView(ListView):
 
         return context
 
+class PostNoTag(ListView):
+    model = Post
+
+    def get_queryset(self):
+        post_list = Post.objects.exclude(deleted = True)
+
+        post_list = post_list.filter(tags = None)
+
+        return post_list.order_by('-datetime')
+
 class PostDetailView(DetailView):
     model = Post
 
