@@ -23,9 +23,11 @@ def ads (post):
     if post.showAds:
         s += '<div class=ads>'
         if post.ads.count():
-            ads = post.ads.all().filter(deleted = False)
+            ads = post.ads.all()
         else:
-            ads = Ads.objects.all().filter(deleted = False)
+            ads = Ads.objects.all()
+
+        #ads = ads.filter(deleted = False)
 
         if ads.count():
             s += '<div class=ad>'
