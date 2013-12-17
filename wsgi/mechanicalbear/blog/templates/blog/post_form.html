@@ -58,4 +58,8 @@
         <a href=/admin/blog/post/{{ post.id }}>редактировать</p></a>
         {% endif %}
     </div>
-</div>
+    <div id="vk_like{{ post.id }}"></div>
+    <script type="text/javascript">
+        VK.Widgets.Like("vk_like{{ post.id }}", {type: "button"});
+    </script>
+    </div>
