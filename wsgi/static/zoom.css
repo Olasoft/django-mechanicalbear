@@ -1,0 +1,28 @@
+@media (max-width: 1280px) and (min-width: 1024px) {
+    body {
+        zoom: 0.9;
+        transform: scale(0.9); 
+        -moz-transform: scale(0.9); 
+        -moz-transform-origin: 0 0; 
+        -o-transform: scale(0.9); 
+        -o-transform-origin: 0 0; 
+        -ms-transform: scale(0.9); 
+        -ms-transform-origin: 0 0;
+    }
+}
+@media (max-width: 1024px) {
+    body {
+        /*
+        -webkit-transform: scale(0.72); 
+        -webkit-transform-origin: 0 0; 
+        */
+        zoom: 0.72;
+        transform: scale(0.72); 
+        -moz-transform: scale(0.72); 
+        -moz-transform-origin: 0 0; 
+        -o-transform: scale(0.72); 
+        -o-transform-origin: 0 0; 
+        -ms-transform: scale(0.72); 
+        -ms-transform-origin: 0 0;
+    }
+}
