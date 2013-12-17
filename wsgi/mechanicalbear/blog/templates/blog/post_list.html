@@ -29,6 +29,7 @@
         <div id="tmp_data"></div>
     </div>
 
+{% if not no_autoload %}
 <!-- Template content -->
 <textarea id="template" style="display:none">
     {#foreach $T as post}
@@ -88,7 +89,9 @@
     </div>
     {#/for}
 </textarea>
+{% endif %}
 
+{% if not no_autoload %}
 <script>
 $(function() {
     page = 1
@@ -141,4 +144,5 @@ $(function() {
     }
 });
 </script>
+{% endif %}
 {% endblock %}

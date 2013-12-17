@@ -126,6 +126,7 @@ class Post(models.Model):
     class Meta:
         verbose_name = 'публикация'
         verbose_name_plural = 'Публикации'
+        ordering = ['-datetime']
 
     title       = models.CharField(u'Заголовок', max_length = 1000, blank = True, null = True)
     datetime    = models.DateTimeField(u'Дата публикации')

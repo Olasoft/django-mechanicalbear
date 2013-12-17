@@ -19,6 +19,24 @@ else:
     host = '127.0.0.1'
 port = 17850
 
+def range_month(year, month):
+    year = int(year)
+    month = int(month)
+    try:
+        fr = date(year, month, 1)
+    except Exception:
+        return False, False
+
+    if month == 12:
+        month = 1
+        year += 1
+    else:
+        month += 1
+
+    to = date(year, month, 1)
+
+    return fr, to
+
 class PostListView(ListView):
     model = Post
 
@@ -30,7 +48,7 @@ class PostListView(ListView):
             tag = get_object_or_404(Tag, Q(slug = tag) | Q(name = tag))
             post_list = post_list.filter(tags = tag)
 
-        return post_list.order_by('-datetime')[:10]
+        return post_list[:10]
 
     def get_context_data(self, *args, **kwargs):
         context = super(PostListView, self).get_context_data(**kwargs)
@@ -42,6 +60,27 @@ class PostListView(ListView):
 
         return context
 
+class PostMonthView(ListView):
+    model = Post
+
+    def get_queryset(self):
+        post_list = Post.objects.exclude(deleted = True)
+
+        y = self.kwargs['year']
+        m = self.kwargs['month']
+        fr, to = range_month(y, m)
+        if fr:
+            post_list = post_list.filter(datetime__range = (fr, to))
+        else:
+            post_list = post_list[:10]
+
+        return post_list
+
+    def get_context_data(self, *args, **kwargs):
+        context = super(PostMonthView, self).get_context_data(**kwargs)
+        context['no_autoload'] = True
+        return context
+
 class PostNoTag(ListView):
     model = Post
 
@@ -50,7 +89,7 @@ class PostNoTag(ListView):
 
         post_list = post_list.filter(tags = None)
 
-        return post_list.order_by('-datetime')
+        return post_list
 
 class PostDetailView(DetailView):
     model = Post
@@ -79,17 +118,12 @@ def doublerouble(request, year, month, slug):
     year = int(year)
     month = int(month)
 
-    fr = date(year, month, 1)
+    fr, to = range_month(year, month)
 
-    if month == 12:
-        month = 1
-        year += 1
+    if fr:
+        blog_post = Post.objects.exclude(deleted = True).filter(datetime__range = (fr, to), slug = slug)
     else:
-        month += 1
-
-    to = date(year, month, 1)
-    #print str(fr) + " " + str(to) + " " + slug
-    blog_post = Post.objects.exclude(deleted = True).filter(datetime__range = (fr, to), slug = slug)
+        raise Http404
 
     if blog_post.count() == 0:
         #print blog_post.count()
@@ -104,7 +138,7 @@ def get_posts(request, page, tag = None):
     post_list = Post.objects.exclude(deleted = True)
     if not tag is None:
         post_list = post_list.filter(tags__slug = tag)
-    post_list = post_list.order_by('-datetime')[fr:to]
+    post_list = post_list[fr:to]
 
     jdata = serializers.serialize('json', post_list, indent=4, 
         relations = ('images', 'videos', 'audios', 'tags', ))

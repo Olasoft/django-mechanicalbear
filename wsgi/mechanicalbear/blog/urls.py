@@ -5,7 +5,7 @@ from django.contrib import admin
 from django.conf import settings
 admin.autodiscover()
 
-from blog.views import PostListView, PostDetailView, PostNoTag
+from blog.views import PostListView, PostDetailView, PostNoTag, PostMonthView
 
 urlpatterns = patterns('',
     url(r'^$', PostListView.as_view(), name='list'),
@@ -13,7 +13,7 @@ urlpatterns = patterns('',
     url(r'^random/$', 'blog.views.random'),
     url(r'^notag/$', PostNoTag.as_view(), name='notag'),
     url(r'^(?P<pk>\d+)/$', PostDetailView.as_view(), name='post'), 
-    url(r'^(?P<year>\d{4})/(?P<month>\d{2})/$', 'blog.views.doublerouble', name='monthly'),
+    url(r'^(?P<year>\d{4})/(?P<month>\d{2})/$', PostMonthView.as_view(), name='monthly'),
     url(r'^(?P<year>\d{4})/(?P<month>\d{2})/(?P<slug>\S+).html$', 'blog.views.doublerouble', name='slug'),
     url(r'^api/get_posts/(?P<page>\d+)/$', 'blog.views.get_posts'),
     url(r'^api/get_posts/(?P<page>\d+)/(?P<tag>\S+)/$', 'blog.views.get_posts'),
