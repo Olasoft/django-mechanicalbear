@@ -86,6 +86,15 @@
             <a href="/admin/blog/post/{$T.post.pk}">редактировать</a>
             {% endif %}
         </div>
+        <div class="social">
+            <div id="vk_like_{$T.post.pk}" style="display: inline"></div>
+            <div id="twit_{$T.post.pk}" style="display: inline">
+                <a href="https://twitter.com/share" class="twitter-share-button" data-lang="ru"
+                    data-url="http://www.mechanicalbear.ru/{$T.post.pk}"
+                    data-text="{$T.post.content}"
+                >Твитнуть</a>
+            </div>
+        </div>
     </div>
     {#/for}
 </textarea>
@@ -130,6 +139,8 @@ $(function() {
                 container.append(tmp.html());
                 tmp.empty();
                 loader.addClass('hidden');
+                update_vk_list(data);
+                update_twitter();
 
                 //console.debug(data.length);
                 if (data.length != 0) {

@@ -58,8 +58,22 @@
         <a href=/admin/blog/post/{{ post.id }}>редактировать</p></a>
         {% endif %}
     </div>
-    <div id="vk_like{{ post.id }}"></div>
-    <script type="text/javascript">
-        VK.Widgets.Like("vk_like{{ post.id }}", {type: "button"});
-    </script>
+    <div class="social">
+        <div id="vk_like_{{ post.id }}" style="display: inline"></div>
+        <div id="twit_{{ post.id }}" style="display: inline">
+            <a href="https://twitter.com/share" class="twitter-share-button" data-lang="ru"
+                data-url="http://www.mechanicalbear.ru/{{ post.id }}"
+                data-text="{{ post.content|striptags|escape|truncatewords:12 }}"
+            >Твитнуть</a>
+        </div>
+        <script type="text/javascript">
+            update_vk(
+                "{{ post.id }}",
+                "{{ post.title }}",
+                "{{ post.content|striptags|escape|truncatewords:12 }}",
+                "{{ post.images.all.0.id }}"
+            );
+            update_twitter();
+        </script>
     </div>
+</div>
