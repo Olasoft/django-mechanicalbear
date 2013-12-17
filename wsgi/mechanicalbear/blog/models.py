@@ -116,8 +116,9 @@ class Ads(models.Model):
         verbose_name = 'реклама'
         verbose_name_plural = 'Рекламные материалы'
 
-    name  = models.CharField(u'Имя', max_length = 100)
+    name    = models.CharField(u'Имя', max_length = 100)
     content = models.TextField(u'Содержание', max_length = 10000, blank = True)
+    deleted = models.BooleanField(u'Удалено', default = False)
 
     def __unicode__(self):
         return self.name
