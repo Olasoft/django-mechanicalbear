@@ -38,10 +38,6 @@
     font-size: 16px;
     text-align: right;
 }
-a.main-header {
-    text-decoration: none;
-    color: #666;
-}
 body {
     padding-top: 10px; /* 60px to make the container go all the way to the bottom of the topbar */
 }
@@ -160,36 +156,58 @@ audio {
 #share42 a:hover {opacity: 1}
 #law { font: 80% serif; }
 #radio-controller {
-    
+}
+#radio-label {
+    /*
+    display: inline;
+    */
+    position: relative;
+    top: 18px;
+    right: 20px;
+    font-family: 'Neucha';
+    font-size: 20px;
+}
+#radio {
+    position: relative;
+    top: -10px;
+    left: 140px;
+    width: 100px;
 }
 #radio-container {
-    position: fixed;
-    right: 70px;
-    text-align: center;
 /*
+    text-align: center;
     border: 1px solid #ccc;
+    position: fixed;
+    right: 10px;
+    top: 20px;
+    margin-top: 25px;
+    border: 1px solid #f00;
 */
     z-index: 100;
-    top: 20px;
 }
 #bear-image {
-    top: 50px;
     /*
     border: 1px solid #ccc;
-    */
     position: fixed;
-    right: 30px;
+    right: 0px;
+    top: 50px;
     width: 250px;
     z-index: -99;
+    */
 }
 #main-header {
     text-align: center;
     padding-bottom: 10px;
     color: #666;
-    /*
-    font-family: 'Chango';
-    */
     font-family: 'Neucha';
+    position: fixed;
+    right: 0px;
+    width: 250px;
+}
+a.main-header {
+    text-decoration: none;
+    color: #666;
+    font-size: 20px;
 }
 .centerr
 {

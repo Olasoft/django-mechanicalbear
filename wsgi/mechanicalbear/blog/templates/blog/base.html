@@ -29,7 +29,9 @@
         {% block extrahead %}{% endblock %}
     </head>
 <body>
+{%comment%}
 <div class="share42init" data-top2="150"></div>
+{% endcomment %}
 <noindex>
 <div id=menu>
     <a href=/>главная</a><br />
@@ -41,41 +43,29 @@
 <div class="navbar navbar-inverse ">
 </div>
 {% endcomment %}
-<div id=radio-container>
-    {%comment %}
-    <span id=radio-control onclick="toggle_radio_play()">радио</span><br />
-    <span>радио</span>
-    {%endcomment %}
-    <audio id=radio preload=none>
-        <source src=/radio.mp3>
-    </audio>
-    <div class="onoffswitch">
-        <input type="checkbox" name="onoffswitch" class="onoffswitch-checkbox" id="radio_control" >
-        <label class="onoffswitch-label" for="radio_control">
-            <div class="onoffswitch-inner"></div>
-            <div class="onoffswitch-switch"></div>
-        </label>
-    </div>
-    {%comment %}
-    <span id=radio-control onclick="toggle_radio_play()">вкл</span>
-    <span class=radio-control onclick="document.getElementById('radio').play()">вкл</span>
-    <span class="radio-control active" onclick="document.getElementById('radio').pause()">выкл</span>
-    <span class=volume-control onclick="document.getElementById('radio').volume += 0.1">+</span>
-    <span class=volume-control onclick="document.getElementById('radio').volume -= 0.1">-</span>
-    {%endcomment %}
-</div>
-<div id="bear-image">
-    <a href="/" class="">
-        <img src={% static "bear.jpg" %}>
-    </a>
-</div>
+<noindex>
+</noindex>
 <div id="main-header">
-    <a href="/" class="main-header">
-        <h2>BORN TO LOSE ♠ LIVE TO WIN</h2>
-    </a>
+    <a href="/" class=""><img src={% static "bear.jpg" %}></a>
+    <a href="/" class="main-header">BORN TO LOSE ♠ LIVE TO WIN</a>
     <noindex>
         <div id=law>Настоящий ресурс может содержать материалы 18+</div>
     </noindex>
+    <div id=radio-container>
+        <span id=radio-label>радио</span>
+        <div id=radio>
+            <audio id=radio preload=none>
+                <source src=/radio.mp3>
+            </audio>
+            <div class="onoffswitch">
+                <input type="checkbox" name="onoffswitch" class="onoffswitch-checkbox" id="radio_control" >
+                <label class="onoffswitch-label" for="radio_control">
+                    <div class="onoffswitch-inner"></div>
+                    <div class="onoffswitch-switch"></div>
+                </label>
+            </div>
+        </div>
+    </div>
 </div>
 {% comment %}
 <div class="navbar navbar-inverse navbar-fixed-top">
