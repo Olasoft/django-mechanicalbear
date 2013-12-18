@@ -86,10 +86,9 @@ def stream():
             limit %d
         ''' % radiolimit
 
+        sql.init()
         sql.cur.execute(query)
         plist = sql.cur.fetchall()
-        sql.cur.close()
-        sql.con.close()
 
         id = 0
         for track in plist:

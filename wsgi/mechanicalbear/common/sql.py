@@ -27,23 +27,31 @@ else:
     dbuser  = 'root'
     dbpass  = 'toor'
 
+con = None
+cur = None
 
-if DBTYPE == 'sqlite':
-    shutil.copyfile(dborig, dbfile)
-    con = sqlite3.connect(dbfile) #, isolation_level = 'IMMEDIATE')
-elif DBTYPE == 'mysql':
-    con = MySQLdb.connect(
-        host   = dbhost,
-        port   = int(dbport),
-        db     = dbname,
-        user   = dbuser,
-        passwd = dbpass,
-        charset= 'utf8'
-        )
-else:
-    sys.exit()
+def init(reinit = False):
+    global con, cur
 
-cur = con.cursor()
+    if not con is None and con.open:
+        if reinit: con.close
+        else: return
+
+    if DBTYPE == 'sqlite':
+        shutil.copyfile(dborig, dbfile)
+        con = sqlite3.connect(dbfile) #, isolation_level = 'IMMEDIATE')
+    elif DBTYPE == 'mysql':
+        con = MySQLdb.connect(
+            host   = dbhost,
+            port   = int(dbport),
+            db     = dbname,
+            user   = dbuser,
+            passwd = dbpass,
+            charset= 'utf8'
+            )
+    else:
+        sys.exit()
+    cur = con.cursor()
 
 def v2q(v):
     if type(v) == int:
@@ -110,7 +118,12 @@ def commit():
     con.commit()
 
 def close():
-    con.close()
-    if DBTYPE == 'sqlite':
-        shutil.copyfile(dbfile, dborig)
-        os.remove(dbfile)
+    try:
+        con.close()
+        if DBTYPE == 'sqlite':
+            shutil.copyfile(dbfile, dborig)
+            os.remove(dbfile)
+    except Exception as e:
+        print e
+
+init()
