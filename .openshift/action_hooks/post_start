@@ -1,4 +1,4 @@
 #!/bin/bash
 
 pkill -f streamer.py
-$OPENSHIFT_REPO_DIR/wsgi/mechanicalbear/streamer/streamer.py &
+$OPENSHIFT_REPO_DIR/wsgi/mechanicalbear/common/streamer.py &

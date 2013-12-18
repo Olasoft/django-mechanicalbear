@@ -5,7 +5,7 @@
 
 #ln -s $OPENSHIFT_DATA_DIR/images $OPENSHIFT_REPO_DIR/wsgi/static/
 #ln -s $OPENSHIFT_DATA_DIR/music $OPENSHIFT_REPO_DIR/wsgi/static/
-ln -s $OPENSHIFT_DATA_DIR/secrets/* $OPENSHIFT_REPO_DIR/wsgi/mechanicalbear/shouter/secrets/
+ln -s $OPENSHIFT_DATA_DIR/secrets/* $OPENSHIFT_REPO_DIR/wsgi/mechanicalbear/common/secrets/
 
 #cp $OPENSHIFT_DATA_DIR/db.sqlite3 $OPENSHIFT_REPO_DIR/wsgi/mechanicalbear/
 
