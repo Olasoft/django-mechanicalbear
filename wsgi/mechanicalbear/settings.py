@@ -55,6 +55,12 @@ elif ON_PRODUCTION:
 else:
     DATABASES = {
         'default': {
+            'ENGINE':   'django.db.backends.mysql',
+            'NAME':     'django',
+            'USER':     'root',
+            'PASSWORD': 'toor',
+        },
+        'sqlite': {
             'ENGINE': 'django.db.backends.sqlite3',  # Add 'postgresql_psycopg2', 'postgresql', 'mysql', 'sqlite3' or 'oracle'.
             'NAME': os.path.join(PROJECT_DIR, 'db.sqlite3'),  # Or path to database file if using sqlite3.
         },
