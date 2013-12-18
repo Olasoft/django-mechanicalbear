@@ -13,10 +13,10 @@ if ON_OPENSHIFT:
     dborig  = os.path.join(datadir, 'db.sqlite3')
     dbfile  = os.path.join(datadir, 'db.sqlite3.new')
     dbhost  = os.environ['OPENSHIFT_MYSQL_DB_HOST']
-    dbport  = os.environ['OPENSHIFT_MYSQL_DB_PORT'],
-    dbname  = os.environ['OPENSHIFT_APP_NAME'],
-    dbuser  = os.environ['OPENSHIFT_MYSQL_DB_USERNAME'],
-    dbpass  = os.environ['OPENSHIFT_MYSQL_DB_PASSWORD'],
+    dbport  = os.environ['OPENSHIFT_MYSQL_DB_PORT']
+    dbname  = os.environ['OPENSHIFT_APP_NAME']
+    dbuser  = os.environ['OPENSHIFT_MYSQL_DB_USERNAME']
+    dbpass  = os.environ['OPENSHIFT_MYSQL_DB_PASSWORD']
 else:
     datadir = os.path.dirname(os.path.realpath(__file__))
     dborig  = os.path.join(datadir, '..', 'db.sqlite3')
@@ -27,17 +27,18 @@ else:
     dbuser  = 'root'
     dbpass  = 'toor'
 
-shutil.copyfile(dborig, dbfile)
 
 if DBTYPE == 'sqlite':
+    shutil.copyfile(dborig, dbfile)
     con = sqlite3.connect(dbfile) #, isolation_level = 'IMMEDIATE')
 elif DBTYPE == 'mysql':
     con = MySQLdb.connect(
         host   = dbhost,
-        port   = dbport,
+        port   = int(dbport),
         db     = dbname,
         user   = dbuser,
-        passwd = dbpass
+        passwd = dbpass,
+        charset= 'utf8'
         )
 else:
     sys.exit()
@@ -110,5 +111,6 @@ def commit():
 
 def close():
     con.close()
-    shutil.copyfile(dbfile, dborig)
-    os.remove(dbfile)
+    if DBTYPE == 'sqlite':
+        shutil.copyfile(dbfile, dborig)
+        os.remove(dbfile)

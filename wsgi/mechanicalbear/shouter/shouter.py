@@ -2,15 +2,11 @@
 # coding: utf-8
 import urllib
 import json
-import cgi
-import os
-import sys
+import os, sys
 import datetime
-import pytz
 import re
 
 import sql, post_twitter, post_tumblr, post_flickr, post_facebook, post_delicious #, prostopleer
-from BeautifulSoup import BeautifulSoup
 from secrets.vk import token
 
 ON_OPENSHIFT = os.environ.has_key('OPENSHIFT_REPO_DIR')
@@ -65,16 +61,8 @@ for entry in data['response'][::-1]:
     text = entry['text']
     date = entry['date']
     tags = []
-    #print(date)
-    #print (json.dumps(entry, sort_keys=True, indent=2))
-    #print(datestr(date, 'yyyymmdd'))
-    #date = datetime.datetime.fromtimestamp(date, pytz.local)
-    #date = datetime.datetime.fromtimestamp(date.astimezone(pytz.utc), pytz.timezone('Asia/Yekaterinburg'))
+
     date = datetime.datetime.utcfromtimestamp(date)
-    #date = datetime.datetime.fromtimestamp(date)
-    #print(data)
-    #sys.exit()
-    #break
 
     attach_text = ""
     image = 0
@@ -89,11 +77,6 @@ for entry in data['response'][::-1]:
                 width = attach['photo']['width']
                 height= attach['photo']['height']
                 ptext = attach['photo']['text']
-
-                # downloading file
-                target = 'images/' + str(pid) + '.jpg'
-                if not os.path.exists(target):
-                    urllib.urlretrieve(src, target)
 
                 sql.upsert('blog_image', {'id': pid}, {'text': text, 'width': width, 'height': height})
                 sql.upsert('blog_post_images', {'post_id': id, 'image_id': pid})
@@ -144,21 +127,6 @@ for entry in data['response'][::-1]:
                 # getting PROSTOPLEER link
                 #track_link = prostopleer.get_track_url(artist, title, duration)
 
-                # downloading file
-                target = 'music/' + str(aid) + '.mp3'
-                link   = 'music/link/'
-                link  += artist.replace('/', '')
-                link  += ' - ' + title.replace('/', '') + '.mp3'
-                if not os.path.exists(target):
-                    urllib.urlretrieve(url, target)
-
-                    i = 1
-                    L = link
-                    while os.path.exists(L):
-                        L = link.replace('.mp3', '.' + str(i) + '.mp3')
-                        i += 1
-                        
-                    os.symlink('../' + str(aid) + '.mp3', L)
                 sql.upsert('blog_audio', {'id': aid}, {'artist': artist, 'title': title, 'duration': duration, 'link': None})
                 sql.upsert('blog_post_audios', {'post_id': id, 'audio_id': aid})
                 add_tag('music', 'саунд')
