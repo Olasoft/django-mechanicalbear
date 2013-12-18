@@ -12,7 +12,9 @@
         <p>{{ post.content|hashes_to_links|safe|linebreaks}}</p>
         <div class="images">
             {% for image in post.images.all %}
-                {{ image.get_html|safe }}
+            <div class=image>
+                <img src="/images/{{ image.id }}.jpg" alt="{{ image.text }}"/>
+            </div>
             {% empty %}
                 <!-- Нет изображений -->
             {% endfor %}
@@ -28,7 +30,7 @@
     <div class="audios">
         {% for audio in post.audios.all %}
             <div class=audio>
-                <audio controls src="/static/music/{{ audio.id }}.mp3" preload=none></audio>
+                <audio controls src="/music/{{ audio.id }}.mp3" preload=none></audio>
                 <div class=audio_info>
                 {{ audio.artist }} - {{ audio.title }}
                 </div>

@@ -40,7 +40,7 @@
                 <div class="images">
                 {#foreach $T.post.fields.images as image}
                     <div class=image>
-                        <img src=/static/images/{$T.image.pk}.jpg alt="{$T.image.fields.text}"/>
+                        <img src=/images/{$T.image.pk}.jpg alt="{$T.image.fields.text}"/>
                     </div>
                 {#/for}
                 </div>
@@ -63,7 +63,7 @@
             <div class="audios">
             {#foreach $T.post.fields.audios as audio}
                 <div class=audio>
-                    <audio controls src="/static/music/{$T.audio.pk}.mp3" preload=none ></audio>
+                    <audio controls src="/music/{$T.audio.pk}.mp3" preload=none ></audio>
                     <div class=audio_info>
                         {$T.audio.fields.artist} - {$T.audio.fields.title}
                     </div>

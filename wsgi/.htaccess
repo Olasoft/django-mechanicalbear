@@ -1,6 +1,6 @@
 RewriteEngine On
 RewriteRule ^application/static/(.+)$ /static/media/$1 [L]
-RewriteRule ^application/images/(.+)$ /static/images/$1 [L]
-RewriteRule ^application/music/(.+)$ /static/music/$1 [L]
+RewriteRule ^application/images/(.+)$ http://149.154.69.37/images/$1 [L]
+RewriteRule ^application/music/(.+)$ http://149.154.69.37/sounds/$1 [L]
 RewriteRule ^application/robots.txt$ /static/robots.txt [L]
 RewriteRule ^application/sitemap.xml$ /static/sitemap.xml [L]
