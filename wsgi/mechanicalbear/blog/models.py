@@ -129,6 +129,8 @@ class Post(models.Model):
         verbose_name_plural = 'Публикации'
         ordering = ['-datetime']
 
+    id          = models.BigIntegerField(u'ID', primary_key=True)
+
     title       = models.CharField(u'Заголовок', max_length = 1000, blank = True, null = True)
     datetime    = models.DateTimeField(u'Дата публикации')
     content     = models.TextField(u'Содержание', max_length = 10000, blank = True)

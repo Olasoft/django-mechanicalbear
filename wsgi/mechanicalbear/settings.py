@@ -33,31 +33,31 @@ if ON_OPENSHIFT:
         'default': {
             'ENGINE': 'django.db.backends.sqlite3',  # Add 'postgresql_psycopg2', 'postgresql', 'mysql', 'sqlite3' or 'oracle'.
             'NAME': os.path.join(os.environ['OPENSHIFT_DATA_DIR'], 'db.sqlite3'),  # Or path to database file if using sqlite3.
-            'USER': '',                      # Not used with sqlite3.
-            'PASSWORD': '',                  # Not used with sqlite3.
-            'HOST': '',                      # Set to empty string for localhost. Not used with sqlite3.
-            'PORT': '',                      # Set to empty string for default. Not used with sqlite3.
-        }
+        },
+        'mysql': {
+            'ENGINE':   'django.db.backends.mysql',
+            'HOST':     os.environ['OPENSHIFT_MYSQL_DB_HOST'],
+            'PORT':     os.environ['OPENSHIFT_MYSQL_DB_PORT'],
+            'NAME':     os.environ['OPENSHIFT_APP_NAME'],
+            'USER':     os.environ['OPENSHIFT_MYSQL_DB_USERNAME'],
+            'PASSWORD': os.environ['OPENSHIFT_MYSQL_DB_PASSWORD'],
+        },
     }
 elif ON_PRODUCTION:
     DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.mysql',
-            'NAME':   'site1',
-            'USER': 'root',
-            'PASSWORD': 'toor',
-        }
+         'default': {
+             'ENGINE': 'django.db.backends.mysql',
+             'NAME':   'site1',
+             'USER': 'root',
+             'PASSWORD': 'toor',
+         }
     }
 else:
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.sqlite3',  # Add 'postgresql_psycopg2', 'postgresql', 'mysql', 'sqlite3' or 'oracle'.
             'NAME': os.path.join(PROJECT_DIR, 'db.sqlite3'),  # Or path to database file if using sqlite3.
-            'USER': '',                      # Not used with sqlite3.
-            'PASSWORD': '',                  # Not used with sqlite3.
-            'HOST': '',                      # Set to empty string for localhost. Not used with sqlite3.
-            'PORT': '',                      # Set to empty string for default. Not used with sqlite3.
-        }
+        },
     }
 
 # Local time zone for this installation. Choices can be found here:
