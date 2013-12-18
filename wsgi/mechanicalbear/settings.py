@@ -31,16 +31,16 @@ if ON_OPENSHIFT:
     # with rhc cartridge add (see /README in this git repo)
     DATABASES = {
         'default': {
-            'ENGINE': 'django.db.backends.sqlite3',  # Add 'postgresql_psycopg2', 'postgresql', 'mysql', 'sqlite3' or 'oracle'.
-            'NAME': os.path.join(os.environ['OPENSHIFT_DATA_DIR'], 'db.sqlite3'),  # Or path to database file if using sqlite3.
-        },
-        'mysql': {
             'ENGINE':   'django.db.backends.mysql',
             'HOST':     os.environ['OPENSHIFT_MYSQL_DB_HOST'],
             'PORT':     os.environ['OPENSHIFT_MYSQL_DB_PORT'],
             'NAME':     os.environ['OPENSHIFT_APP_NAME'],
             'USER':     os.environ['OPENSHIFT_MYSQL_DB_USERNAME'],
             'PASSWORD': os.environ['OPENSHIFT_MYSQL_DB_PASSWORD'],
+        },
+        'sqlite': {
+            'ENGINE': 'django.db.backends.sqlite3',  # Add 'postgresql_psycopg2', 'postgresql', 'mysql', 'sqlite3' or 'oracle'.
+            'NAME': os.path.join(os.environ['OPENSHIFT_DATA_DIR'], 'db.sqlite3'),  # Or path to database file if using sqlite3.
         },
     }
 elif ON_PRODUCTION:
