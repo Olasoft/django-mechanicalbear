@@ -88,6 +88,9 @@
         </div>
         <div class="social">
             <div id="vk_like_{$T.post.pk}" style="display: inline"></div>
+{% comment %}
+            <a target="_blank" class="surfinbird__like_button" data-surf-config="{'url': 'http://www.mechanicalbear.ru/{$T.post.pk}', 'layout': 'common-gray', 'width': '90', 'height': '20' }" href="http://surfingbird.ru/share">Surf</a>
+{% endcomment %}
             <div id="twit_{$T.post.pk}" style="display: inline">
                 <a href="https://twitter.com/share" class="twitter-share-button" data-lang="ru"
                     data-url="http://www.mechanicalbear.ru/{$T.post.pk}"
@@ -97,6 +100,9 @@
         </div>
     </div>
     {#/for}
+{% comment %}
+    <script type="text/javascript" charset="UTF-8" src="http://surfingbird.ru/share/share.min.js"></script>
+{% endcomment %}
 </textarea>
 {% endif %}
 
@@ -140,7 +146,7 @@ $(function() {
                 tmp.empty();
                 loader.addClass('hidden');
                 update_vk_list(data);
-                update_twitter();
+                twttr.widgets.load();
 
                 //console.debug(data.length);
                 if (data.length != 0) {

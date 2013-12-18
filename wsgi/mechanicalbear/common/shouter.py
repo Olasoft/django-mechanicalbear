@@ -124,8 +124,25 @@ for entry in data['response'][::-1]:
                 title = attach['audio']['title']
                 duration = attach['audio']['duration']
 
+                song = artist + ' - ' + title
                 # getting PROSTOPLEER link
                 #track_link = prostopleer.get_track_url(artist, title, duration)
+                l = ['placebo', 'molko']
+                if any(word in song.lower() for word in l):
+                    add_tag('placebo')
+                    tags.append('placebo')
+                l = ['nine inch nails', 'reznor']
+                if any(word in song.lower() for word in l):
+                    add_tag('nin')
+                    tags.append('nin')
+                l = ['manson']
+                if any(word in song.lower() for word in l):
+                    add_tag('mm')
+                    tags.append('mm')
+                l = [u'самойлов', u'самойлоff', 'samoiloff', u'агата кристи']
+                if any(word in song.lower() for word in l):
+                    add_tag('samoiloff')
+                    tags.append('samoiloff')
 
                 sql.upsert('blog_audio', {'id': aid}, {'artist': artist, 'title': title, 'duration': duration, 'link': None})
                 sql.upsert('blog_post_audios', {'post_id': id, 'audio_id': aid})

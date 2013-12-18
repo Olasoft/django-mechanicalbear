@@ -1,20 +1,22 @@
 // Twitter JS
 function update_twitter() {
-    !function(d,s,id){
+    !function(d, s, id){
+/*
         console.debug(d)
         console.debug(s)
         console.debug(id)
+*/
         var js,
             fjs = d.getElementsByTagName(s)[0],
-            p=/^http:/.test(d.location)?'http':'https';
+            p = /^http:/.test(d.location)?'http':'https';
+
         if(!d.getElementById(id)){
-            js=d.createElement(s);
+            js = d.createElement(s);
             js.id=id;
             js.src=p+'://platform.twitter.com/widgets.js';
             fjs.parentNode.insertBefore(js,fjs);
         }
     } (document, 'script', 'twitter-wjs');
-    twttr.widgets.load();
 }
 function update_vk(id, title, content, pid) {
     if (title == null) title = 'Мишка Механический';
