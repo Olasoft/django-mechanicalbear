@@ -47,6 +47,17 @@ def add_tag(tag, name = ''):
 
         all_tags[tag] = tag_id
 
+def detect_tag(tags, string, l, tag):
+    if any(word in string.lower() for word in l):
+        add_tag(tag)
+        tags.append(tag)
+
+def detect_tags(tags, string):
+    detect_tag(tags, string, ['placebo', 'molko'], 'placebo')
+    detect_tag(tags, string, ['nine inch nails', 'reznor'], 'nin')
+    detect_tag(tags, string, ['manson'], 'mm')
+    detect_tag(tags, string, [u'самойлов', u'самойлоff', 'samoiloff', u'агата кристи'], 'samoiloff')
+
 
 response = urllib.urlopen(wurl)
 data = response.read()
@@ -111,6 +122,7 @@ for entry in data['response'][::-1]:
                     sql.upsert('blog_post_videos', {'post_id': id, 'video_id': vid})
                     add_tag('video', 'видео')
                     tags.append('video')
+                    detect_tags(tags, title)
                 attach_text = attach_text + " " + title
                 if video == 0:
                     video = vid
@@ -124,26 +136,8 @@ for entry in data['response'][::-1]:
                 title = attach['audio']['title']
                 duration = attach['audio']['duration']
 
-                song = artist + ' - ' + title
                 # getting PROSTOPLEER link
                 #track_link = prostopleer.get_track_url(artist, title, duration)
-                l = ['placebo', 'molko']
-                if any(word in song.lower() for word in l):
-                    add_tag('placebo')
-                    tags.append('placebo')
-                l = ['nine inch nails', 'reznor']
-                if any(word in song.lower() for word in l):
-                    add_tag('nin')
-                    tags.append('nin')
-                l = ['manson']
-                if any(word in song.lower() for word in l):
-                    add_tag('mm')
-                    tags.append('mm')
-                l = [u'самойлов', u'самойлоff', 'samoiloff', u'агата кристи']
-                if any(word in song.lower() for word in l):
-                    add_tag('samoiloff')
-                    tags.append('samoiloff')
-
                 sql.upsert('blog_audio', {'id': aid}, {'artist': artist, 'title': title, 'duration': duration, 'link': None})
                 sql.upsert('blog_post_audios', {'post_id': id, 'audio_id': aid})
                 add_tag('music', 'саунд')
@@ -151,6 +145,9 @@ for entry in data['response'][::-1]:
                 #sys.exit()
                 attach_text = attach_text + " " + artist + " - " + title + "<br />"
                     
+                song = artist + ' - ' + title
+                detect_tags(tags, song)
+
     except KeyError:
         print ("No attachments")
     '''
