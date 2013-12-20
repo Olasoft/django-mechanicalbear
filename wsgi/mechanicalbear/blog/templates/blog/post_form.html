@@ -13,7 +13,7 @@
         <div class="images">
             {% for image in post.images.all %}
             <div class=image>
-                <img src="/images/{{ image.id }}.jpg" alt="{{ image.text }}"/>
+                <img src="/images/{{ image.id }}.{{ image.ext|default_if_none:'jpg' }}" alt="{{ image.text }}"/>
             </div>
             {% empty %}
                 <!-- Нет изображений -->

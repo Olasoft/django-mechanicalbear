@@ -61,9 +61,7 @@ def detect_tags(tags, string):
 
 response = urllib.urlopen(wurl)
 data = response.read()
-data = json.loads(data.decode("utf8")) #content_type_opts.get("charset", "utf-8")))
-
-#print (json.dumps(data, sort_keys=True, indent=2))
+data = json.loads(data.decode("utf8"))
 
 for entry in data['response'][::-1]:
     if isinstance(entry, (int, float, complex)):
@@ -81,8 +79,6 @@ for entry in data['response'][::-1]:
     try:
         for attach in entry['attachments']:
             if attach['type'] == 'photo':
-                #print (json.dumps(attach, sort_keys=True, indent=2))
-                #sys.exit()
                 pid = attach['photo']['pid']
                 src = attach['photo']['src_big']
                 width = attach['photo']['width']
@@ -91,7 +87,7 @@ for entry in data['response'][::-1]:
 
                 sql.upsert('blog_image', {'id': pid}, {'text': text, 'width': width, 'height': height})
                 sql.upsert('blog_post_images', {'post_id': id, 'image_id': pid})
-                #text += '\n<div class=image><img src=' + src + ' /></div>'
+
                 add_tag('pictures', 'картинки')
                 tags.append('pictures')
 
@@ -99,8 +95,6 @@ for entry in data['response'][::-1]:
                     image = pid
 
             elif attach['type'] == 'video':
-                #print('video')
-                #print (json.dumps(attach, sort_keys=True, indent=2))
                 vid = attach['video']['vid']
                 oid = attach['video']['owner_id']
                 aid = attach['video']['access_key']
@@ -111,11 +105,7 @@ for entry in data['response'][::-1]:
                 r = urllib.urlopen(vurl % (oid, vid))
                 d = r.read()
                 d = json.loads(d.decode("utf8"))
-                #print(json.dumps(d, indent=2))
-               # for e in d['response'][1]:
-               #     print(json.dumps(e, indent=2))
-                #print(player)
-                #sys.exit()
+
                 if d['response'][0] > 0:
                     player = d['response'][1]['player']
                     sql.upsert('blog_video', {'id': vid}, {'oid': oid, 'player': player, 'title': title, 'descr': descr})
@@ -128,16 +118,12 @@ for entry in data['response'][::-1]:
                     video = vid
 
             elif attach['type'] == 'audio':
-                #print (json.dumps(attach, sort_keys=True, indent=2))
-                #print('audio')
                 aid =  attach['audio']['aid']
                 url =  attach['audio']['url']
                 artist = attach['audio']['artist']
                 title = attach['audio']['title']
                 duration = attach['audio']['duration']
 
-                # getting PROSTOPLEER link
-                #track_link = prostopleer.get_track_url(artist, title, duration)
                 sql.upsert('blog_audio', {'id': aid}, {'artist': artist, 'title': title, 'duration': duration, 'link': None})
                 sql.upsert('blog_post_audios', {'post_id': id, 'audio_id': aid})
                 add_tag('music', 'саунд')
@@ -156,22 +142,13 @@ for entry in data['response'][::-1]:
     print ("id: " + str(id))
     '''
     p = re.compile(r'<.*?>')
-    #text = p.sub('', text)
     attach_text = p.sub('', attach_text)
-
-    #print ("text: " + text)
-
-    #add_tag('vk', 'вкашка')
-    #tags.append('vk')
 
     t = re.sub('<[^>]*>', ' ', text)
     t = set([i[1:] for i in t.split() if i.startswith("#")])
     for tag in t:
         add_tag(tag)
         tags.append(tag)
-
-    #print all_tags
-    #print id, tags
 
     for tag in tags:
         if tag in all_tags:

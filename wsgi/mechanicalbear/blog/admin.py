@@ -53,7 +53,7 @@ class VideoAdmin(admin.ModelAdmin):
     list_display_links = ('title',)
 
 class ImageAdmin(admin.ModelAdmin):
-    list_display = ('id', 'text')
+    list_display = ('id', 'ext', 'text')
     list_display_links = ('id',)
 
 class TagAdmin(admin.ModelAdmin):

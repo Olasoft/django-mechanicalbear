@@ -40,7 +40,7 @@
                 <div class="images">
                 {#foreach $T.post.fields.images as image}
                     <div class=image>
-                        <img src=/images/{$T.image.pk}.jpg alt="{$T.image.fields.text}"/>
+                        <img src=/images/{$T.image.pk}.{$T.image.fields.ext || 'jpg'} alt="{$T.image.fields.text}"/>
                     </div>
                 {#/for}
                 </div>

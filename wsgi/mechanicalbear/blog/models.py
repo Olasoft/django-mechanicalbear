@@ -10,6 +10,7 @@ class Image(models.Model):
     text  = models.TextField(u'Описание', max_length = 10000, blank = True)
     width = models.BigIntegerField(u'Ширина', blank = True)
     height= models.BigIntegerField(u'Высота', blank = True)
+    ext   = models.CharField(u'Расширение', blank = True, max_length = 5)
 
     def __unicode__(self):
         return str(self.id)
