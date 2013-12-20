@@ -87,9 +87,14 @@ class PostNoTag(ListView):
     def get_queryset(self):
         post_list = Post.objects.exclude(deleted = True)
 
-        post_list = post_list.filter(tags = None)
+        post_list = post_list.filter(tags = None).order_by('-id')
 
-        return post_list
+        return post_list[:20]
+
+    def get_context_data(self, *args, **kwargs):
+        context = super(PostNoTag, self).get_context_data(**kwargs)
+        context['no_autoload'] = True
+        return context
 
 class PostDetailView(DetailView):
     model = Post

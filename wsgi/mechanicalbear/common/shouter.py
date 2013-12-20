@@ -57,6 +57,7 @@ def detect_tags(tags, string):
     detect_tag(tags, string, ['nine inch nails', 'reznor'], 'nin')
     detect_tag(tags, string, ['manson'], 'mm')
     detect_tag(tags, string, [u'самойлов', u'самойлоff', 'samoiloff', u'агата кристи'], 'samoiloff')
+    detect_tag(tags, string, [u'гражданская оборона', u'гроб', 'летов', u'опизденевшие'], 'letov')
 
 
 response = urllib.urlopen(wurl)
@@ -88,8 +89,8 @@ for entry in data['response'][::-1]:
                 sql.upsert('blog_image', {'id': pid}, {'text': text, 'width': width, 'height': height})
                 sql.upsert('blog_post_images', {'post_id': id, 'image_id': pid})
 
-                add_tag('pictures', 'картинки')
-                tags.append('pictures')
+                #add_tag('pictures', 'картинки')
+                #tags.append('pictures')
 
                 if image == 0:
                     image = pid
@@ -126,8 +127,8 @@ for entry in data['response'][::-1]:
 
                 sql.upsert('blog_audio', {'id': aid}, {'artist': artist, 'title': title, 'duration': duration, 'link': None})
                 sql.upsert('blog_post_audios', {'post_id': id, 'audio_id': aid})
-                add_tag('music', 'саунд')
-                tags.append('music')
+                #add_tag('music', 'саунд')
+                #tags.append('music')
                 #sys.exit()
                 attach_text = attach_text + " " + artist + " - " + title + "<br />"
                     
