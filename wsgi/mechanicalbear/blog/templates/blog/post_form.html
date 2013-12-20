@@ -9,11 +9,11 @@
     {% else %}
     <div class="post_content">
     {% endif %}
-        <p>{{ post.content|hashes_to_links|safe|linebreaks}}</p>
+        <p>{{ post.content|safe|linebreaks}}</p>
         <div class="images">
             {% for image in post.images.all %}
             <div class=image>
-                <img src="/images/{{ image.id }}.{{ image.ext|default_if_none:'jpg' }}" alt="{{ image.text }}"/>
+                <img src="/images/{{ image.id }}.{{ image.ext|default:'jpg' }}" alt="{{ image.text }}"/>
             </div>
             {% empty %}
                 <!-- Нет изображений -->
