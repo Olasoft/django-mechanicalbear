@@ -1,5 +1,5 @@
 # coding: utf-8
-from blog.models import Post, Tag
+from blog.models import Post, Tag, Ads
 from django.shortcuts import redirect, render_to_response, get_object_or_404
 from django.views.generic import ListView, DetailView
 from django.http import Http404, HttpResponse
@@ -107,6 +107,15 @@ class PostDetailView(DetailView):
         else:
             return object
 
+def banner(request):
+    ads = Ads.objects.all()
+    ads = ads.filter(deleted = False, public = True)
+
+    if ads.count():
+        random_index = randint(0, ads.count() - 1)
+        data = ads[random_index].content
+        return HttpResponse(data) #, content_type = "text/html")
+
 def random(request):
     blog_posts = Post.objects.exclude(deleted = True)
     count = blog_posts.count()
@@ -115,9 +124,6 @@ def random(request):
     random_index = randint(0, count -1)
 
     return redirect('post', blog_posts[random_index].id)
-
-def monthly(request, year, month):
-    return random(request)
 
 def doublerouble(request, year, month, slug):
     year = int(year)

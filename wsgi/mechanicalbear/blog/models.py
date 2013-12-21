@@ -101,7 +101,7 @@ class Tag(models.Model):
 #    id    = models.CharField(u'Имя', max_length = 100, primary_key = True)
     name  = models.CharField(u'Имя', max_length = 100)
     slug  = models.CharField(u'SLUG', max_length = 100, null = True, unique = True)
-    public= models.BooleanField(u'Публичный', default = True)
+    public= models.BooleanField(u'Публичный', default = False)
     descr = models.TextField(u'Описание', max_length = 10000, blank = True)
 
     def __unicode__(self):
@@ -120,6 +120,7 @@ class Ads(models.Model):
     name    = models.CharField(u'Имя', max_length = 100)
     content = models.TextField(u'Содержание', max_length = 10000, blank = True)
     deleted = models.BooleanField(u'Удалено', default = False)
+    public  = models.BooleanField(u'Публичный', default = False)
 
     def __unicode__(self):
         return self.name

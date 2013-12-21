@@ -72,9 +72,9 @@ class TagAdmin(admin.ModelAdmin):
     post_count.short_description = 'Публикации'
 
 class AdsAdmin(admin.ModelAdmin):
-    list_display = ('id', 'name', 'content')
+    list_display = ('id', 'name', 'public', 'deleted')
     list_display_links = ('name',)
-    #list_editable = ('public',)
+    list_editable = ('public', 'deleted')
     ordering = ('name',)
 
 admin.site.register(Post, PostAdmin)
