@@ -114,7 +114,9 @@ def banner(request):
     if ads.count():
         random_index = randint(0, ads.count() - 1)
         data = ads[random_index].content
-        return HttpResponse(data) #, content_type = "text/html")
+        response = HttpResponse(data) #, content_type = "text/html")
+        response["Access-Control-Allow-Origin"] = "*"
+        return response
 
 def random(request):
     blog_posts = Post.objects.exclude(deleted = True)
@@ -153,6 +155,8 @@ def get_posts(request, page, tag = None):
 
     jdata = serializers.serialize('json', post_list, indent=4, 
         relations = ('images', 'videos', 'audios', 'tags', ))
+    jdata = jdata.replace('\\r\\n', '\\n')
+    jdata = jdata.replace('\\n', '<br />\\n')
     #print type(jdata)
     #jdata = re.sub(r"#(?!\d)(\S+)([ \"])", r"<a href='/tag/\1' class=hashtag>#\1</a>\2", jdata)
     return HttpResponse(jdata, content_type="application/json")

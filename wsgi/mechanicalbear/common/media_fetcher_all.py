@@ -2,6 +2,7 @@
 # coding: utf-8
 import urllib
 import json
+import datetime
 import os
 
 from secrets.vk import token
@@ -38,18 +39,22 @@ while 1:
                         r = urllib.urlretrieve(src, target)
 
                 elif attach['type'] == 'audio':
-                    continue
                     aid =  attach['audio']['aid']
                     url =  attach['audio']['url']
                     artist = attach['audio']['artist']
                     title = attach['audio']['title']
                     duration = attach['audio']['duration']
+                    date = entry['date']
 
                     target = os.path.join(DIR, 'sounds', str(aid) + '.mp3')
 
-                    link  = artist.replace('/', '')
+                    date = datetime.datetime.fromtimestamp(date).strftime('%Y%m%d%H%M%S')
+                    link = os.path.join(DIR, 'sounds', 'link', date[:4], date[4:6])
+                    if not os.path.exists(link):
+                        os.makedirs(link)
+                    link = os.path.join(link, date)
+                    link  += ' - ' + artist.replace('/', '')
                     link  += ' - ' + title.replace('/', '') + '.mp3'
-                    link = os.path.join(DIR, 'sounds', 'link', link)
 
                     refetch = False
                     if os.path.exists(target):
@@ -57,22 +62,27 @@ while 1:
                         r = urllib.urlopen(url)
                         remote_size = int(r.info().getheaders('content-length')[0])
                         if local_size < remote_size:
-                            print 'sound refetch', target
+                            print 'sound refetch', aid, artist + ' - ' + title
                             refetch = True
 
+                    #print link
+                    #continue
+                    L = link
                     if not os.path.exists(target) or refetch:
                         r = urllib.urlretrieve(url, target)
                         print 'sound', title + ' - ' + artist
 
                         i = 1
-                        L = link
                         while os.path.exists(L):
                             L = link.replace('.mp3', '.' + str(i) + '.mp3')
                             i += 1
 
-                        os.symlink(target, L)
+                    src = os.path.join('..', '..', '..', str(aid) + '.mp3')
+                    if not os.path.exists(L):
+                        os.symlink(src, L)
 #                    else:
 #                        print 'exist sound', target
+
 
                 elif attach['type'] == 'video':
                     continue
@@ -95,5 +105,5 @@ while 1:
         except KeyError as k:
             continue
         except Exception as e:
-            print "Exception!", e
+            print "Exception!", e, target, link
 

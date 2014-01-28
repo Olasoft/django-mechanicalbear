@@ -1,7 +1,6 @@
 <!DOCTYPE html>{% load staticfiles post_tags %}
 <html lang="ru">
     <head>
-
         <title>{% spaceless %}{% block title %}Мишка Механический{% endblock %}{% endspaceless %}</title>
         <meta name='description' content="{% spaceless %}{% block description %}бесконечная лента красивых картинок, забавного видео, интересной музыки и любви{% endblock %}{% endspaceless %}" />
         <meta name='keywords' content="{% spaceless %}{% block keywords %} {% endblock %}{% endspaceless %}" />
@@ -11,6 +10,16 @@
         <meta name='yandex-verification' content='581a44356acdc5da' />
         <meta name="google-site-verification" content="iGCGhUogmvwN1eArcdsASnGOyg7ytmZHqYfUBWICVG8" />
         <meta name="vk:app_id" content="2963114" />
+
+	<meta name="twitter:card" content="summary_large_image">
+	<meta name="twitter:title" content="{% spaceless %}{% block twitter_title %}Мишка Механический{% endblock %}{% endspaceless %}">
+	<meta name="twitter:description" content="{% spaceless %}{% block twitter_description %}бесконечная лента красивых картинок, забавного видео, интересной музыки и любви{% endblock %}{% endspaceless %}">
+	<meta name="twitter:image" content="{% spaceless %}{% block twitter_image %}http://www.mechanicalbear.ru/static/bear.jpg{% endblock %}{% endspaceless %}">
+	<meta name="twitter:site" content="MechanicalBear">
+	<meta name="twitter:creator" content="MechanicalBear">
+	<meta name="twitter:domain" content="MechanicalBear.ru">
+{% comment %}
+{% endcomment %}
 
         <link href={% static "bootstrap/css/bootstrap.css" %} rel="stylesheet">
         <link href={% static "bootstrap/css/bootstrap-responsive.css" %} rel="stylesheet">

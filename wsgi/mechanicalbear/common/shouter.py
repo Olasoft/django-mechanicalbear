@@ -57,7 +57,8 @@ def detect_tags(tags, string):
     detect_tag(tags, string, ['nine inch nails', 'reznor'], 'nin')
     detect_tag(tags, string, ['manson'], 'mm')
     detect_tag(tags, string, [u'самойлов', u'самойлоff', 'samoiloff', u'агата кристи'], 'samoiloff')
-    detect_tag(tags, string, [u'гражданская оборона', u'гроб', 'летов', u'опизденевшие'], 'letov')
+    detect_tag(tags, string, [u'гражданская оборона', u'гроб', u'летов', u'опизденевшие'], 'letov')
+    detect_tag(tags, string, ['love', 'ilu', u'любовь', u'люблю'], 'love')
 
 
 response = urllib.urlopen(wurl)
@@ -134,6 +135,20 @@ for entry in data['response'][::-1]:
                     
                 song = artist + ' - ' + title
                 detect_tags(tags, song)
+            elif attach['type'] == 'doc':
+                did = attach['doc']['did']
+                ext = attach['doc']['ext']
+                src = attach['doc']['url']
+
+                if ext == 'gif':
+                    sql.upsert('blog_image', {'id': did}, {'text': '', 'width': 0, 'height': 0, 'ext': ext})
+                    sql.upsert('blog_post_images', {'post_id': id, 'image_id': did})
+
+                    add_tag('gif', u'гифки')
+                    tags.append('gif')
+
+                    if image == 0:
+                        image = did
 
     except KeyError:
         print ("No attachments")
@@ -150,6 +165,7 @@ for entry in data['response'][::-1]:
     for tag in t:
         add_tag(tag)
         tags.append(tag)
+    detect_tags(tags, text)
 
     for tag in tags:
         if tag in all_tags:

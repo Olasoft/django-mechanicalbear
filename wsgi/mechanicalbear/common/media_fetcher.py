@@ -51,6 +51,16 @@ for entry in data['response'][::-1]:
                         i += 1
                         
                     os.symlink(target, L)
+            elif attach['type'] == 'doc':
+                doc = attach['doc']
+                if doc['ext'] == 'gif':
+                    did = doc['did']
+                    src = doc['url']
+
+                    target = os.path.join(DIR, 'images', str(did) + '.gif')
+                    if not os.path.exists(target):
+                        r = urllib.urlretrieve(src, target)
+                        print 'gif', target
     except KeyError:
         print ("No attachments")
 

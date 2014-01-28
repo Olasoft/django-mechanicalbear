@@ -13,6 +13,18 @@
     {% endif %}
 {% endblock %}
 
+{% comment %}
+{% endcomment %}
+{% block twitter_title %}
+    {% if post.title %}
+        {{ post.title }} - {{ block.super }}
+    {% elif post.content %}
+        {{ block.super }} - {{ post.content|striptags|safe|truncatewords:5 }}
+    {% else %}
+        {{ block.super }}
+    {% endif %}
+{% endblock %}
+
 {% block keywords %}
     {% if post.tags %}{{ post.tags.all|join:', ' }}
     {% else %}{{ block.super }}
@@ -22,6 +34,26 @@
 {% block description %}
     {% if post.content %}{{ post.content|striptags|safe|truncatewords:15 }}
     {% else %}{{ block.super }}
+    {% endif %}
+{% endblock %}
+
+{% comment %}
+{% endcomment %}
+{% block twitter_description %}
+    {% if post.content %}
+    {{ post.content|striptags|safe }}
+    <br />
+    {% endif %}
+    {% for audio in post.audios.all %} {{ audio.artist }} - {{ audio.title }} {% endfor %}
+    {% for video in post.videos.all %}
+    	{{ video.title }}<br />
+    	{{ video.descr }}
+    {% endfor %}
+{% endblock %}
+
+{% block twitter_image %}
+    {% if post.images.count %}
+        http://www.mechanicalbear.ru/images/{{ post.images.all.0.id }}.{{ post.images.all.0.ext|default:'jpg' }}
     {% endif %}
 {% endblock %}
 
